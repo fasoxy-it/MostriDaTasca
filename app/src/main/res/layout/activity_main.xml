@@ -47,7 +47,7 @@
         android:layout_height="80dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="624dp"
-        android:background="@drawable/user_information_background"
+        android:background="@drawable/user_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

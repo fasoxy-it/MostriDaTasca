@@ -4,6 +4,117 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/icon_background"
     tools:context=".PopUp">
+
+    <ImageView
+        android:id="@+id/backbuttonIcon"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="209dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/back_button_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/monstercandyImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="30dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/monstercandynameTextView"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:text="Monster/Candy Name"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/levelIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="190dp"
+        android:src="@drawable/level_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/monstercandysizeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="190dp"
+        android:text="Level"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/monstercandyrangeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="210dp"
+        android:text="Range"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rangeIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="210dp"
+        android:src="@drawable/range_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:clickable="true"
+        android:id="@+id/fighteatButton"
+        android:layout_width="164dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="250dp"
+        android:background="@drawable/fighteat_button_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/fighteatIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/candy_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fighteat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="5dp"
+            android:text="fighteat"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
