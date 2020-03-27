@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -81,8 +83,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // Insertion Request Text
     JSONObject jsonBody;
-    public static String SESSION_ID = null;
+    public static String SESSION_ID;
 
+    public static int USER_XP;
+    public static int USER_LIFEPOINTS;
 
     // Monster / Candies ArrayList
     private ArrayList<MonsterCandy> monsterscandies = new ArrayList<MonsterCandy>();
@@ -175,9 +179,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         timer.schedule(timerTask, 0, 10000);
 
-        getUserInformation();
-        Log.d("MainActivity", "Method getUserInformation");
-
 
         // Permission Location Request
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
@@ -209,6 +210,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onResume() {
         super.onResume();
         Log.d("MainActivity", "Method onResume");
+
+        getUserInformation();
+        Log.d("MainActivity", "Method getUserInformation");
+
         mapView.onResume();
 
     }
@@ -448,19 +453,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onAnnotationClick(Symbol symbol) {
 
-                    Intent fightIntent = new Intent(getApplicationContext(), PopUp.class);
+                    Intent fighteatIntent = new Intent(getApplicationContext(), PopUp.class);
 
-                    fightIntent.putExtra("session_id", SESSION_ID);
-                    fightIntent.putExtra("user_lat", location.getLatitude());
-                    fightIntent.putExtra("user_lon", location.getLongitude());
-                    fightIntent.putExtra("monstercandy_id", monstercandyId);
-                    fightIntent.putExtra("monstercandy_lat", monstercandyLat);
-                    fightIntent.putExtra("monstercandy_lon", monstercandyLon);
-                    fightIntent.putExtra("monstercandy_type", monstercandyType);
-                    fightIntent.putExtra("monstercandy_size", monstercandySize);
-                    fightIntent.putExtra("monstercandy_name", monstercandyName);
+                    fighteatIntent.putExtra("userId", SESSION_ID);
+                    fighteatIntent.putExtra("userXp", USER_XP);
+                    fighteatIntent.putExtra("userLifepoints", USER_LIFEPOINTS);
+                    fighteatIntent.putExtra("userLat", location.getLatitude());
+                    fighteatIntent.putExtra("userLon", location.getLongitude());
+                    fighteatIntent.putExtra("monstercandyId", monstercandyId);
+                    fighteatIntent.putExtra("monstercandyLat", monstercandyLat);
+                    fighteatIntent.putExtra("monstercandyLon", monstercandyLon);
+                    fighteatIntent.putExtra("monstercandyType", monstercandyType);
+                    fighteatIntent.putExtra("monstercandySize", monstercandySize);
+                    fighteatIntent.putExtra("monstercandyName", monstercandyName);
 
-                    startActivity(fightIntent);
+                    startActivity(fighteatIntent);
 
                 }
             });
@@ -589,12 +596,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             userImageView.setImageBitmap(decodedByte);
                             //Log.d("MainActivity", img);
 
-                            String xp = response.getString("xp");
+                            int xp = response.getInt("xp");
+                            USER_XP = xp;
                             TextView xpTextView = findViewById(R.id.xp);
-                            xpTextView.setText(xp);
+                            xpTextView.setText(String.valueOf(xp));
                             //Log.d("MainActivity", xp);
 
                             int lp = response.getInt("lp");
+                            USER_LIFEPOINTS = lp;
                             ProgressBar lifepointsProgressBar = findViewById(R.id.lifepoints);
                             lifepointsProgressBar.setProgress(lp);
                             //Log.d("MainActivity", "" + lp);
@@ -640,6 +649,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 case R.id.userInformation:
                     Log.d("MainActivity", "Method onClick userInformation");
                     Intent userInformationIntent = new Intent(getBaseContext(), Profile.class);
+                    userInformationIntent.putExtra("session_id", SESSION_ID);
                     startActivity(userInformationIntent);
                     break;
             }

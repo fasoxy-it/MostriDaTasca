@@ -33,7 +33,7 @@ public class Register extends AppCompatActivity {
     // Shared Preference Variables
     public static final String SHARED_PREFERENCES = "sharedPreference";
     public static final String SESSION_ID = "SESSION_ID";
-    public static String session_id = null;
+    public static String session_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +41,14 @@ public class Register extends AppCompatActivity {
         Log.d("Register", "Method onCreate");
         setContentView(R.layout.activity_register);
 
+        // Load SESSION_ID
         loadData();
 
-        if (session_id == "") {
+        if (session_id.equals("")) {
 
             // Register Button
             View registerButton = findViewById(R.id.registerButton);
             registerButton.setOnClickListener(objectClickListener);
-
-            // Create the Request Queue
-            requestQueue = Volley.newRequestQueue(this);
 
         } else {
 
@@ -115,53 +113,60 @@ public class Register extends AppCompatActivity {
                 // onClick Register Button
                 case R.id.registerButton:
                     Log.d("Register", "Method onClick RegisterButton");
-
-                    // Set Register to Server
-                    JsonObjectRequest register = new JsonObjectRequest(
-                            BASE_URL + REGISTER_API,
-                            jsonBody,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-
-                                    Log.d("Register", "Request done");
-
-                                    try {
-                                        session_id = response.getString("session_id");
-
-                                        saveData();
-
-                                        loadData();
-
-                                        Log.d("Register", "SESSION_ID: " + session_id);
-
-                                        Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                        mainActivityIntent.putExtra("session_id", session_id);
-                                        startActivity(mainActivityIntent);
-
-                                    } catch (JSONException e){
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.d("Register", "Request failed");
-                                    Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            }
-                    );
-
-                    // Add the Request to the Request Queue
-                    requestQueue.add(register);
-
+                    register();
                     break;
             }
         }
     };
+
+    public void register() {
+
+        // Create the Request Queue
+        requestQueue = Volley.newRequestQueue(this);
+
+        // Set Register to Server
+        JsonObjectRequest register = new JsonObjectRequest(
+                BASE_URL + REGISTER_API,
+                jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("Register", "Request done");
+
+                        try {
+                            session_id = response.getString("session_id");
+
+                            // Save SESSION_ID
+                            saveData();
+
+                            // Load SESSION_ID
+                            loadData();
+
+                            // Put Extra Information to the MainActivity
+                            Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                            mainActivityIntent.putExtra("session_id", session_id);
+                            startActivity(mainActivityIntent);
+
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Register", "Request failed");
+                        Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+        );
+
+        // Add the Request to the Request Queue
+        requestQueue.add(register);
+    }
 
     public void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);

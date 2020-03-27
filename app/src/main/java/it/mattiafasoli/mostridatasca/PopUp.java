@@ -13,8 +13,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +33,6 @@ import java.util.ArrayList;
 
 public class PopUp extends Activity {
 
-    // Monster / Candies ArrayList
-    private ArrayList<MonsterCandy> monsterscandies = null;
-
     // Server Request Queue
     public RequestQueue requestQueue = null;
 
@@ -45,19 +44,25 @@ public class PopUp extends Activity {
     // Insertion Request Text
     JSONObject jsonBody;
 
-    public static String SESSION_ID = null;
-    public static double USER_LAT;
-    public static double USER_LON;
+    // User Information
+    public static String userId;
+    public static double userLat;
+    public static double userLon;
+    public static int userXpBefore;
+    public static int userLifepointsBefore;
+    public static int userXpAfter;
+    public static int userLifepointsAfter;
+    public static String userDied;
 
-    public static String MONSTERCANDY_ID = null;
-    public static double MONSTERCANDY_LAT;
-    public static double MONSTERCANDY_LON;
-    public static String MONSTERCANDY_TYPE = null;
-    public static String MONSTERCANDY_SIZE = null;
-    public static String MONSTERCANDY_NAME = null;
+    // Monster/Candy Information
+    public static String monstercandyId;
+    public static double monstercandyLat;
+    public static double monstercandyLon;
+    public static String monstercandyType;
+    public static String monstercandySize;
+    public static String monstercandyName;
 
-    public static int USERMONSTERCANDY_RANGE;
-
+    public static int usermonstercandyRange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,81 +70,152 @@ public class PopUp extends Activity {
         Log.d("PopUp", "Method onCreate");
         setContentView(R.layout.activity_pop_up);
 
-        // Back Button
-        View backButton = findViewById(R.id.backbuttonIcon);
-        backButton.setOnClickListener(objectClickListener);
-
-        // Eat Button
-        View fighteatButton = findViewById(R.id.fighteatButton);
-        fighteatButton.setOnClickListener(objectClickListener);
-
-        // Get Monsters / Candies Information from Model
-        monsterscandies = Model.getInstance().getMonstersCandiesList();
-
-        // Extra Information
-        Bundle bundle = getIntent().getExtras();
-
-        SESSION_ID = bundle.getString("session_id");
-        USER_LAT = bundle.getDouble("user_lat");
-        USER_LON = bundle.getDouble("user_lon");
-
-        MONSTERCANDY_ID = bundle.getString("monstercandy_id");
-        MONSTERCANDY_LAT = bundle.getDouble("monstercandy_lat");
-        MONSTERCANDY_LON = bundle.getDouble("monstercandy_lon");
-        MONSTERCANDY_TYPE = bundle.getString("monstercandy_type");
-        MONSTERCANDY_SIZE = bundle.getString("monstercandy_size");
-        MONSTERCANDY_NAME = bundle.getString("monstercandy_name");
-
-        getMonsterCandyImage();
-
-        TextView monstercandynameTextView = findViewById(R.id.monstercandynameTextView);
-        monstercandynameTextView.setText(MONSTERCANDY_NAME);
-
-        TextView monstercandySizeTextView = findViewById(R.id.monstercandysizeTextView);
-        monstercandySizeTextView.setText(MONSTERCANDY_SIZE);
-
-        getUserMonsterCandyRange();
-
-        TextView monstercandyrangeTextView = findViewById(R.id.monstercandyrangeTextView);
-        monstercandyrangeTextView.setText(String.valueOf(USERMONSTERCANDY_RANGE));
-
-        ImageView fighteatImageView = findViewById(R.id.fighteatIcon);
-        TextView fighteatTextView = findViewById(R.id.fighteat);
-
-        if (MONSTERCANDY_TYPE.equals("MO")) {
-            fighteatImageView.setImageResource(R.drawable.monster_icon);
-            fighteatTextView.setText("Fight");
-        } else if (MONSTERCANDY_TYPE.equals("CA")) {
-            fighteatImageView.setImageResource(R.drawable.candy_icon);
-            fighteatTextView.setText("Eat");
-        }
-
+        // Get PopUp Default Settings
         getPopUpDefaultSettings();
-    }
-
-    public void getMonsterCandyImage() {
 
         // Create the Request Queue
         requestQueue = Volley.newRequestQueue(this);
 
-        // Session_id + Target_id Insertion into Request
+        // Get Extra Information
+        getExtraInformation();
+
+        // Close Button
+        View closeButton = findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(objectClickListener);
+
+        // Fight/Eat Button
+        View fighteatButton = findViewById(R.id.fighteatButton);
+        fighteatButton.setOnClickListener(objectClickListener);
+
+        ImageView eatImageView = findViewById(R.id.eatIcon);
+        ImageView fightImageView = findViewById(R.id.fightIcon);
+
+        if (monstercandyType.equals("MO")) {
+            fightImageView.setVisibility(View.VISIBLE);
+        } else if (monstercandyType.equals("CA")) {
+            eatImageView.setVisibility(View.VISIBLE);
+        }
+
+        // MonsterCandy Name TextView
+        TextView monstercandynameTextView = findViewById(R.id.monstercandynameTextView);
+        monstercandynameTextView.setText(monstercandyName);
+
+        // MonsterCandy Size TextView
+        TextView monstercandySizeTextView = findViewById(R.id.monstercandysizeTextView);
+        monstercandySizeTextView.setText(monstercandySize);
+
+        // MonsterCandy Range TextView
+        TextView monstercandyrangeTextView = findViewById(R.id.monstercandyrangeTextView);
+        getUserMonsterCandyRange();
+        monstercandyrangeTextView.setText(String.valueOf(usermonstercandyRange));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("PopUp", "Method onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("PopUp", "Method onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("PopUp", "Method onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("PopUp", "Method onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("PopUp", "Method onDestroy");
+    }
+
+    // Object Click Listener
+    private View.OnClickListener objectClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+
+                // onClick Close Button
+                case R.id.closeButton:
+                    Log.d("PopUp", "Method onClick BackButton");
+
+                    PopUp.super.onBackPressed();
+
+                    break;
+
+                // onClick FightEat Button
+                case R.id.fighteatButton:
+                    Log.d("PopUp", "Method onClick Eat Button");
+
+                    if (usermonstercandyRange > 50) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Too far from the target", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+                        toast.show();
+                    } else {
+                        fighteat();
+                        PopUp.super.onBackPressed();
+                    }
+
+                    break;
+
+            }
+        }
+    };
+
+    public void getExtraInformation() {
+
+        // Extra Information
+        Bundle bundle = getIntent().getExtras();
+
+        // User Information
+        userId = bundle.getString("userId");
+        userLat = bundle.getDouble("userLat");
+        userLon = bundle.getDouble("userLon");
+        userXpBefore = bundle.getInt("userXp");
+        userLifepointsBefore = bundle.getInt("userLifepoints");
+
+        // MonsterCandy Information
+        monstercandyId = bundle.getString("monstercandyId");
+        monstercandyLat = bundle.getDouble("monstercandyLat");
+        monstercandyLon = bundle.getDouble("monstercandyLon");
+        monstercandyType = bundle.getString("monstercandyType");
+        monstercandySize = bundle.getString("monstercandySize");
+        monstercandyName = bundle.getString("monstercandyName");
+
+        getMonsterCandyImage();
+
+    }
+
+    public void getMonsterCandyImage() {
+
+        // Insertion [session_id + target_id] into Request
         try {
-            jsonBody = new JSONObject("{\"session_id\":\"" + SESSION_ID + "\",\"target_id\":\"" +  MONSTERCANDY_ID +  "\"}");
+            jsonBody = new JSONObject("{\"session_id\":\"" + userId + "\",\"target_id\":\"" +  monstercandyId +  "\"}");
         } catch (JSONException ex) {
-            Log.d("EatPopUp", "Insert session_id and target_id failed");
+            Log.d("PopUp", "Insert [session_id and target_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
             toast.show();
         }
 
-        // Get Candies Image from Server
+        // Get MonsterCandy Image from Server
         JsonObjectRequest getMonsterCandyImageRequest = new JsonObjectRequest(
                 BASE_URL + MONSTERCANDY_IMAGE_API,
                 jsonBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("EatPopUp", "Request done");
-                        Log.d("EatPopUp", response.toString());
+                        Log.d("PopUp", "Request done");
 
                         try {
 
@@ -158,7 +234,7 @@ public class PopUp extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("EatPopUp", "Request failed");
+                        Log.d("PopUp", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -170,21 +246,23 @@ public class PopUp extends Activity {
     }
 
     public void getUserMonsterCandyRange() {
+
+        // User Location
         Location userLocation = new Location("");
-        userLocation.setLatitude(USER_LAT);
-        userLocation.setLongitude(USER_LON);
-        Log.d("Distance", "" + userLocation);
+        userLocation.setLatitude(userLat);
+        userLocation.setLongitude(userLon);
 
-        Location candyLocation = new Location("");
-        candyLocation.setLatitude(MONSTERCANDY_LAT);
-        candyLocation.setLongitude(MONSTERCANDY_LON);
-        Log.d("Distance", "" + candyLocation);
+        // MonsterCandy Location
+        Location monstercandyLocation = new Location("");
+        monstercandyLocation.setLatitude(monstercandyLat);
+        monstercandyLocation.setLongitude(monstercandyLon);
 
-        USERMONSTERCANDY_RANGE = (int) userLocation.distanceTo(candyLocation);
+        usermonstercandyRange = (int) userLocation.distanceTo(monstercandyLocation);
 
     }
 
     public void getPopUpDefaultSettings() {
+
         // PopUp Default Settings
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -192,7 +270,7 @@ public class PopUp extends Activity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int) (width*0.6106870229), (int) (height*0.4195804196));
+        getWindow().setLayout((int) (width*0.6106870229), (int) (height*0.406504065));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
@@ -200,38 +278,56 @@ public class PopUp extends Activity {
         params.y = -150;
 
         getWindow().setAttributes(params);
+
     }
 
     public void fighteat() {
 
-        // Session_id + Target_id Insertion into Request
+        // Insertion [session_id + target_id] into Request
         try {
-            jsonBody = new JSONObject("{\"session_id\":\"" + SESSION_ID + "\",\"target_id\":\"" +  MONSTERCANDY_ID +  "\"}");
+            jsonBody = new JSONObject("{\"session_id\":\"" + userId + "\",\"target_id\":\"" +  monstercandyId +  "\"}");
         } catch (JSONException ex) {
             Log.d("EatPopUp", "Insert session_id failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
             toast.show();
         }
 
-        // Get Eat from Server
-        JsonObjectRequest getEatRequest = new JsonObjectRequest(
+        // Get fighteat from Server
+        JsonObjectRequest getFightEatRequest = new JsonObjectRequest(
                 BASE_URL + FIGHTEAT_API,
                 jsonBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("EatPopUp", "Request done");
-                        Log.d("EatPopUp", response.toString());
+                        Log.d("PopUp", "Request done");
 
-                        Intent eatIntent = new Intent(getBaseContext(), ResultPopUp.class);
-                        startActivity(eatIntent);
+                        try {
+                            userDied = response.getString("died");
+                            userXpAfter = response.getInt("xp");
+                            userLifepointsAfter = response.getInt("lp");
+
+                            Intent fighteatIntent = new Intent(getApplicationContext(), ResultPopUp.class);
+
+                            fighteatIntent.putExtra("userId", userId);
+                            fighteatIntent.putExtra("userXpBefore", userXpBefore);
+                            fighteatIntent.putExtra("userLifepointsBefore", userLifepointsBefore);
+                            fighteatIntent.putExtra("userXpAfter", userXpAfter);
+                            fighteatIntent.putExtra("userLifepointsAfter", userLifepointsAfter);
+                            fighteatIntent.putExtra("userDied", userDied);
+                            fighteatIntent.putExtra("monstercandyType", monstercandyType);
+
+                            startActivity(fighteatIntent);
+
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                        }
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("EatPopUp", "Request failed");
+                        Log.d("PopUp", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -239,33 +335,8 @@ public class PopUp extends Activity {
         );
 
         // Add the Request to the Request Queue
-        requestQueue.add(getEatRequest);
+        requestQueue.add(getFightEatRequest);
 
     }
-
-    // Object Click Listener
-    private View.OnClickListener objectClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-
-                // onClick Back Button
-                case R.id.backbuttonIcon:
-                    Log.d("PopUp", "Method onClick BackButton");
-                    PopUp.super.onBackPressed();
-                    break;
-
-                // onClick Eat Button
-                case R.id.fighteatButton:
-                    Log.d("PopUp", "Method onClick Eat Button");
-
-                    fighteat();
-
-                    PopUp.super.onBackPressed();
-
-                    break;
-            }
-        }
-    };
 
 }

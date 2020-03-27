@@ -10,7 +10,7 @@ public class MonsterCandy {
 
     public MonsterCandy (String id, Double lat, Double lon, String type, String size, String name) {
         this.id = id;
-        this. lat = lat;
+        this.lat = lat;
         this.lon = lon;
         this.type = type;
         this.size = size;

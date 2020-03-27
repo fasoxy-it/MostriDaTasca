@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,17 +14,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ResultPopUp"></activity>
+        <activity
+            android:name=".ResultPopUp"
+            android:theme="@style/AppTheme.ResultPopUp"
+        />
         <activity android:name=".Ranking" />
         <activity android:name=".Profile" />
         <activity android:name=".Register">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PopUp" />
+        <activity
+            android:name=".PopUp"
+            android:theme="@style/AppTheme.PopUp"
+        />
         <activity android:name=".MainActivity"  />
     </application>
 

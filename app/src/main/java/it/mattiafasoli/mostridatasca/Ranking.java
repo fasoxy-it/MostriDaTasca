@@ -28,6 +28,7 @@ public class Ranking extends AppCompatActivity {
 
     // Insertion Request Text
     JSONObject jsonBody;
+
     public static String SESSION_ID = null;
 
 
@@ -35,6 +36,9 @@ public class Ranking extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
+
+        // Create Server Request Queue
+        requestQueue = Volley.newRequestQueue(this);
 
         // Extra Information
         Bundle bundle = getIntent().getExtras();
@@ -53,9 +57,6 @@ public class Ranking extends AppCompatActivity {
 
         final Adapter adapter = new Adapter(this,this, Model.getInstance().getUsersList());
         recyclerView.setAdapter(adapter);
-
-        // Create Server Request Queue
-        requestQueue = Volley.newRequestQueue(this);
 
         // Server Request Insertion SESSION_ID
         try {
