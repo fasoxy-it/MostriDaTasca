@@ -48,12 +48,12 @@ public class Model {
 
                 JSONObject user = array.getJSONObject(i);
 
-                String username = user.getString("username");
-                String image = user.getString("img");
-                String xp = user.getString("xp");
-                int lifepoints = user.getInt("lp");
+                String userName = user.getString("username");
+                String userImage = user.getString("img");
+                int userXp = user.getInt("xp");
+                int userLifepoints = user.getInt("lp");
 
-                User newUser = new User(username, image, xp, lifepoints);
+                User newUser = new User(userName, userImage, userXp, userLifepoints);
                 users.add(newUser);
             }
         } catch (JSONException e) {
@@ -61,7 +61,7 @@ public class Model {
         }
     }
 
-    public void depopulateMonsterCandies() {
+    public void depopulateMonstersCandies() {
         for (int i=monsterscandies.size()-1; i>=0; i--){
             monsterscandies.remove(i);
         }

@@ -34,35 +34,38 @@ import java.util.ArrayList;
 public class PopUp extends Activity {
 
     // Server Request Queue
-    public RequestQueue requestQueue = null;
+    private RequestQueue requestQueue;
 
-    // Server Request Constant URL
-    public static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
-    public static final String MONSTERCANDY_IMAGE_API = "getimage.php";
-    public static final String FIGHTEAT_API = "fighteat.php";
+    // Server Request Insertion Text
+    JSONObject jsonBody = new JSONObject();
 
-    // Insertion Request Text
-    JSONObject jsonBody;
+    // Server Request URL
+    private static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
+    private static final String MONSTERCANDY_IMAGE_API = "getimage.php";
+    private static final String FIGHTEAT_API = "fighteat.php";
 
     // User Information
-    public static String userId;
-    public static double userLat;
-    public static double userLon;
-    public static int userXpBefore;
-    public static int userLifepointsBefore;
-    public static int userXpAfter;
-    public static int userLifepointsAfter;
-    public static String userDied;
+    private static String userId;
+    private static double userLat;
+    private static double userLon;
+    private static int userXpBefore;
+    private static int userLifepointsBefore;
+    private static int userXpAfter;
+    private static int userLifepointsAfter;
 
-    // Monster/Candy Information
-    public static String monstercandyId;
-    public static double monstercandyLat;
-    public static double monstercandyLon;
-    public static String monstercandyType;
-    public static String monstercandySize;
-    public static String monstercandyName;
+    private static String userDied;
 
-    public static int usermonstercandyRange;
+    // MonsterCandy Information
+    private static String monstercandyId;
+    private static double monstercandyLat;
+    private static double monstercandyLon;
+    private static String monstercandyType;
+    private static String monstercandySize;
+    private static String monstercandyName;
+
+    private static Bitmap monstercandyImage;
+
+    private static int monstercandyRange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,25 +73,25 @@ public class PopUp extends Activity {
         Log.d("PopUp", "Method onCreate");
         setContentView(R.layout.activity_pop_up);
 
-        // Get PopUp Default Settings
-        getPopUpDefaultSettings();
+        // Get PopUp Layout
+        getPopUpLayout();
 
-        // Create the Request Queue
-        requestQueue = Volley.newRequestQueue(this);
-
-        // Get Extra Information
+        // Get Extra Information from previous Activity
         getExtraInformation();
 
-        // Close Button
+        // Set PopUp Information
+        setPopUpInformation();
+
+        // Set Close Button
         View closeButton = findViewById(R.id.closeButton);
         closeButton.setOnClickListener(objectClickListener);
 
-        // Fight/Eat Button
+        // Set Fight/Eat Button
         View fighteatButton = findViewById(R.id.fighteatButton);
         fighteatButton.setOnClickListener(objectClickListener);
 
-        ImageView eatImageView = findViewById(R.id.eatIcon);
-        ImageView fightImageView = findViewById(R.id.fightIcon);
+        ImageView fightImageView = findViewById(R.id.fightImageView);
+        ImageView eatImageView = findViewById(R.id.eatImageView);
 
         if (monstercandyType.equals("MO")) {
             fightImageView.setVisibility(View.VISIBLE);
@@ -96,18 +99,6 @@ public class PopUp extends Activity {
             eatImageView.setVisibility(View.VISIBLE);
         }
 
-        // MonsterCandy Name TextView
-        TextView monstercandynameTextView = findViewById(R.id.monstercandynameTextView);
-        monstercandynameTextView.setText(monstercandyName);
-
-        // MonsterCandy Size TextView
-        TextView monstercandySizeTextView = findViewById(R.id.monstercandysizeTextView);
-        monstercandySizeTextView.setText(monstercandySize);
-
-        // MonsterCandy Range TextView
-        TextView monstercandyrangeTextView = findViewById(R.id.monstercandyrangeTextView);
-        getUserMonsterCandyRange();
-        monstercandyrangeTextView.setText(String.valueOf(usermonstercandyRange));
     }
 
     @Override
@@ -148,17 +139,15 @@ public class PopUp extends Activity {
 
                 // onClick Close Button
                 case R.id.closeButton:
-                    Log.d("PopUp", "Method onClick BackButton");
-
+                    Log.d("PopUp", "Method onClick CloseButton");
                     PopUp.super.onBackPressed();
-
                     break;
 
                 // onClick FightEat Button
                 case R.id.fighteatButton:
-                    Log.d("PopUp", "Method onClick Eat Button");
+                    Log.d("PopUp", "Method onClick FightEat Button");
 
-                    if (usermonstercandyRange > 50) {
+                    if (monstercandyRange > 50) {
                         Toast toast = Toast.makeText(getApplicationContext(), "Too far from the target", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
                         toast.show();
@@ -173,19 +162,43 @@ public class PopUp extends Activity {
         }
     };
 
+    public void getPopUpLayout() {
+
+        Log.d("PopUp", "Method getPopUpLayout");
+
+        // Get PopUp Layout
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+
+        getWindow().setLayout((int) (width*0.6106870229), (int) (height*0.406504065));
+
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.gravity = Gravity.CENTER;
+        params.x = 0;
+        params.y = -150;
+
+        getWindow().setAttributes(params);
+
+    }
+
     public void getExtraInformation() {
 
-        // Extra Information
+        Log.d("PopUp", "Method getExtraInformation");
+
+        // Get Extra Information from previous Activity
         Bundle bundle = getIntent().getExtras();
 
-        // User Information
+        // Get / Set User Information from previous Activity
         userId = bundle.getString("userId");
         userLat = bundle.getDouble("userLat");
         userLon = bundle.getDouble("userLon");
         userXpBefore = bundle.getInt("userXp");
         userLifepointsBefore = bundle.getInt("userLifepoints");
 
-        // MonsterCandy Information
+        // Get / Set MonsterCandy Information from previous Activity
         monstercandyId = bundle.getString("monstercandyId");
         monstercandyLat = bundle.getDouble("monstercandyLat");
         monstercandyLon = bundle.getDouble("monstercandyLon");
@@ -193,17 +206,45 @@ public class PopUp extends Activity {
         monstercandySize = bundle.getString("monstercandySize");
         monstercandyName = bundle.getString("monstercandyName");
 
-        getMonsterCandyImage();
+    }
+
+    public void getMonsterCandyRange() {
+
+        Log.d("PopUp", "Method getMonsterCandyRange");
+
+        // Set User Location
+        Location userLocation = new Location("");
+        userLocation.setLatitude(userLat);
+        userLocation.setLongitude(userLon);
+
+        // Set MonsterCandy Location
+        Location monstercandyLocation = new Location("");
+        monstercandyLocation.setLatitude(monstercandyLat);
+        monstercandyLocation.setLongitude(monstercandyLon);
+
+        // Set MonsterCandy Range
+        monstercandyRange = (int) userLocation.distanceTo(monstercandyLocation);
+
+        // Set MonsterCandy Range TextView
+        TextView monstercandyRangeTextView = findViewById(R.id.monstercandyrangeTextView);
+        monstercandyRangeTextView.setText(String.valueOf(monstercandyRange));
 
     }
 
     public void getMonsterCandyImage() {
 
+        Log.d("PopUp", "Method getMonsterCandyImage");
+
+        // Create the Request Queue
+        requestQueue = Volley.newRequestQueue(this);
+
         // Insertion [session_id + target_id] into Request
         try {
-            jsonBody = new JSONObject("{\"session_id\":\"" + userId + "\",\"target_id\":\"" +  monstercandyId +  "\"}");
+            jsonBody.put("session_id", userId);
+            jsonBody.put("target_id", monstercandyId);
         } catch (JSONException ex) {
-            Log.d("PopUp", "Insert [session_id and target_id] failed");
+            ex.printStackTrace();
+            Log.d("PopUp", "Insert [session_id + target_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -219,12 +260,14 @@ public class PopUp extends Activity {
 
                         try {
 
-                            // Set Candy Image
+                            // Set MonsterCandy Image
                             String monstercandyImageString = response.getString("img");
-                            ImageView monstercandyImageView = findViewById(R.id.monstercandyImageView);
                             byte[] decodedString = Base64.decode(monstercandyImageString, Base64.DEFAULT);
-                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            monstercandyImageView.setImageBitmap(decodedByte);
+                            monstercandyImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                            // Set MonsterCandy Image ImageView
+                            ImageView monstercandyImageImageView = findViewById(R.id.monstercandyImageView);
+                            monstercandyImageImageView.setImageBitmap(monstercandyImage);
 
                         } catch (JSONException e){
                             e.printStackTrace();
@@ -245,54 +288,44 @@ public class PopUp extends Activity {
         requestQueue.add(getMonsterCandyImageRequest);
     }
 
-    public void getUserMonsterCandyRange() {
+    public void setPopUpInformation() {
 
-        // User Location
-        Location userLocation = new Location("");
-        userLocation.setLatitude(userLat);
-        userLocation.setLongitude(userLon);
+        Log.d("PopUp", "Method setPopUpInformation");
 
-        // MonsterCandy Location
-        Location monstercandyLocation = new Location("");
-        monstercandyLocation.setLatitude(monstercandyLat);
-        monstercandyLocation.setLongitude(monstercandyLon);
+        // Set MonsterCandy Image ImageView
+        getMonsterCandyImage();
 
-        usermonstercandyRange = (int) userLocation.distanceTo(monstercandyLocation);
+        // Set MonsterCandy Name TextView
+        TextView monstercandyNameTextView = findViewById(R.id.monstercandynameTextView);
+        monstercandyNameTextView.setText(monstercandyName);
 
-    }
+        // Set MonsterCandy Size TextView
+        TextView monstercandySizeTextView = findViewById(R.id.monstercandysizeTextView);
+        monstercandySizeTextView.setText(monstercandySize);
 
-    public void getPopUpDefaultSettings() {
-
-        // PopUp Default Settings
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        int width = displayMetrics.widthPixels;
-        int height = displayMetrics.heightPixels;
-
-        getWindow().setLayout((int) (width*0.6106870229), (int) (height*0.406504065));
-
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.gravity = Gravity.CENTER;
-        params.x = 0;
-        params.y = -150;
-
-        getWindow().setAttributes(params);
+        // Set MonsterCandy Range TextView
+        getMonsterCandyRange();
 
     }
 
     public void fighteat() {
 
+        Log.d("PopUp", "Method fighteat");
+
+        // Create the Request Queue
+        requestQueue = Volley.newRequestQueue(this);
+
         // Insertion [session_id + target_id] into Request
         try {
-            jsonBody = new JSONObject("{\"session_id\":\"" + userId + "\",\"target_id\":\"" +  monstercandyId +  "\"}");
+            jsonBody.put("session_id", userId);
+            jsonBody.put("target_id", monstercandyId);
         } catch (JSONException ex) {
-            Log.d("EatPopUp", "Insert session_id failed");
+            Log.d("PopUp", "Insert [session_id + target_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
             toast.show();
         }
 
-        // Get fighteat from Server
+        // Get [fighteat] from Server
         JsonObjectRequest getFightEatRequest = new JsonObjectRequest(
                 BASE_URL + FIGHTEAT_API,
                 jsonBody,
@@ -302,6 +335,8 @@ public class PopUp extends Activity {
                         Log.d("PopUp", "Request done");
 
                         try {
+
+                            // Set [fighteat] Result
                             userDied = response.getString("died");
                             userXpAfter = response.getInt("xp");
                             userLifepointsAfter = response.getInt("lp");

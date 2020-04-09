@@ -7,7 +7,9 @@
     android:background="@drawable/pop_up_background"
     tools:context=".PopUp">
 
+
     <ImageView
+        
         android:id="@+id/closeButton"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -42,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/levelIcon"
+        android:id="@+id/levelImageView"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginStart="90dp"
@@ -62,7 +64,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/rangeIcon"
+        android:id="@+id/rangeImageView"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginStart="90dp"
@@ -88,12 +90,12 @@
         android:layout_height="30dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="250dp"
-        android:background="@drawable/fighteat_button_background"
+        android:background="@drawable/rounded_angle_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/fightIcon"
+            android:id="@+id/fightImageView"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="40dp"
@@ -104,7 +106,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/eatIcon"
+            android:id="@+id/eatImageView"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="40dp"

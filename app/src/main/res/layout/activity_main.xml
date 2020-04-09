@@ -24,7 +24,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="336dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/icon_background"
+        android:background="@drawable/rounded_angle_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -51,16 +51,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0.5dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="297dp"
-            android:layout_marginTop="0dp"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/userImage"
             android:layout_width="60dp"
@@ -68,8 +58,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/userName"
@@ -128,7 +117,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/rankingInformation"

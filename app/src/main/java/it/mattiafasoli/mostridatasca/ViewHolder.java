@@ -10,11 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
-    private TextView rankingposition;
-    private TextView username;
-    private ImageView userimage;
-    private TextView userxp;
-    private ProgressBar userlifepoints;
+    // Ranking Information
+    private TextView rankingPosition;
+
+    // User Information
+    private TextView userName;
+    private ImageView userImage;
+    private TextView userXp;
+    private ProgressBar userLifepoints;
+
+    // ViewHolder
     private String user;
     private Activity parentActivity;
 
@@ -22,22 +27,26 @@ public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClic
         super(itemView);
         this.parentActivity = parentActivity;
 
-        rankingposition = itemView.findViewById(R.id.rankingPositionTextView);
-        username = itemView.findViewById(R.id.usernameTextView);
-        userimage = itemView.findViewById(R.id.userImage);
-        userxp = itemView.findViewById(R.id.xpTextView);
-        userlifepoints = itemView.findViewById(R.id.lifepointsProgressBar);
+        // Set User Information ItemView
+        rankingPosition = itemView.findViewById(R.id.rankingPositionTextView);
+        userName = itemView.findViewById(R.id.userNameTextView);
+        userImage = itemView.findViewById(R.id.userImageImageView);
+        userXp = itemView.findViewById(R.id.userXpTextView);
+        userLifepoints = itemView.findViewById(R.id.userLifepointsProgressBar);
         //itemView.setOnClickListener(this);
     }
 
 
     public void setUser(User user) {
-        this.user = user.getUsername();
-        rankingposition.setText(String.valueOf(getAdapterPosition()+1));
-        username.setText(user.getUsername());
-        userimage.setImageBitmap(user.getImage());
-        userxp.setText(user.getXp());
-        userlifepoints.setProgress(user.getLifepoints());
+        this.user = user.getUserName();
+
+        // Set User Information ItemView
+        rankingPosition.setText(String.valueOf(getAdapterPosition()+1));
+        userName.setText(user.getUserName());
+        userImage.setImageBitmap(user.getUserImage());
+        userXp.setText(String.valueOf(user.getUserXp()));
+        userLifepoints.setProgress(user.getUserLifepoints());
+
     }
 
     /*

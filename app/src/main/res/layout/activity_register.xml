@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".Register">
 
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="393dp"
+        android:layout_height="738dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.mapbox.mapboxsdk.maps.MapView>
+
     <Button
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"

@@ -12,8 +12,11 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
+    // ViewHolder
     private LayoutInflater inflater;
     private Activity parentActivity;
+
+    // User ArrayList
     private ArrayList<User> users;
 
     public Adapter(Context context, Activity parentActivity, ArrayList<User>users) {
@@ -30,6 +33,8 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        // Set User Information
         User user = Model.getInstance().getUserByIndex(position);
         holder.setUser(user);
     }

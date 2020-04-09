@@ -8,10 +8,10 @@ public class User {
     private String username;
     private String imagestring;
     private Bitmap image;
-    private String xp;
+    private int xp;
     private int lifepoints;
 
-    public User (String username, String imagestring, String xp, int lifepoints) {
+    public User (String username, String imagestring, int xp, int lifepoints) {
         this.username = username;
         this.imagestring = imagestring;
         byte[] decodedString = Base64.decode(imagestring, Base64.DEFAULT);
@@ -21,35 +21,20 @@ public class User {
         this.lifepoints = lifepoints;
     }
 
-
-    public String getUsername() {
+    public String getUserName() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Bitmap getImage() {
+    public Bitmap getUserImage() {
         return image;
     }
 
-    public void setImage(String imagestring) { this.imagestring = imagestring; }
-
-    public String getXp() {
+    public int getUserXp() {
         return xp;
     }
 
-    public void setXp(String xp) {
-        this.xp = xp;
-    }
-
-    public int getLifepoints() {
+    public int getUserLifepoints() {
         return lifepoints;
-    }
-
-    public void setLifepoints(int lifepoints) {
-        this.lifepoints = lifepoints;
     }
 
 }

@@ -13,18 +13,18 @@ import android.widget.TextView;
 public class ResultPopUp extends AppCompatActivity {
 
     // User Information
-    public static int userXpBefore;
-    public static int userLifepointsBefore;
-    public static int userXpAfter;
-    public static int userLifepointsAfter;
+    private static int userXpBefore;
+    private static int userLifepointsBefore;
+    private static int userXpAfter;
+    private static int userLifepointsAfter;
 
-    public static int userXp;
-    public static int userLifepoints;
+    private static int userXp;
+    private static int userLifepoints;
 
-    public static String userDied;
+    private static String userDied;
 
     // MonsterCandy Information
-    public static String monstercandyType;
+    private static String monstercandyType;
 
 
     @Override
@@ -33,48 +33,19 @@ public class ResultPopUp extends AppCompatActivity {
         Log.d("ResultPopUp", "Method onCreate");
         setContentView(R.layout.activity_result_pop_up);
 
-        // Get Result PopUp Default Settings
-        getResultPopUpDefaultSettings();
+        // Get Result PopUp Layout
+        getResultPopUpLayout();
 
-        // Get Extra Information
+        // Get Extra Information from previous Activity
         getExtraInformation();
 
-        // Close Button
+        // Set Result PopUp Information
+        setResultPopUpInformation();
+
+        // Set Close Button
         View closeButton = findViewById(R.id.closeButton);
         closeButton.setOnClickListener(objectClickListener);
 
-        // Result TextView
-        TextView victoryResultTextView = findViewById(R.id.victoryResultTextView);
-        TextView defeatResultTextView = findViewById(R.id.defeatResultTextView);
-        TextView eatenResultTextView = findViewById(R.id.eatenResultTextView);
-
-        if (monstercandyType.equals("MO")) {
-            if (userDied.equals("false")) {
-                victoryResultTextView.setVisibility(View.VISIBLE);
-            } else if (userDied.equals("true")) {
-                defeatResultTextView.setVisibility(View.VISIBLE);
-            }
-        } else if (monstercandyType.equals("CA")) {
-            eatenResultTextView.setVisibility(View.VISIBLE);
-        }
-
-        // Result Xp TextView
-        TextView resultxpTextView = findViewById(R.id.resultxpTextView);
-
-        if (userXp >= 0) {
-            resultxpTextView.setText("+" + String.valueOf(userXp));
-        } else if (userXp < 0) {
-            resultxpTextView.setText(String.valueOf(userXp));
-        }
-
-        // Result Life Points TextView
-        TextView resultlifepointsTextView = findViewById(R.id.resultlifepointsTextView);
-
-        if (userLifepoints >= 0) {
-            resultlifepointsTextView.setText("+" + String.valueOf(userLifepoints));
-        } else if (userLifepoints < 0) {
-            resultlifepointsTextView.setText(String.valueOf(userLifepoints));
-        }
     }
 
     @Override
@@ -123,11 +94,11 @@ public class ResultPopUp extends AppCompatActivity {
         }
     };
 
-    public void getResultPopUpDefaultSettings() {
+    public void getResultPopUpLayout() {
 
-        Log.d("ResultPopUp", "Method getResultPopUpDefaultSettings");
+        Log.d("ResultPopUp", "Method getResultPopUpLayout");
 
-        // PopUp Default Settings
+        // Result PopUp Layout
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -149,22 +120,63 @@ public class ResultPopUp extends AppCompatActivity {
 
         Log.d("ResultPopUp", "Method getExtraInformation");
 
-        // Extra Information
+        // Get Extra Information from previous Activity
         Bundle bundle = getIntent().getExtras();
 
-        // User Information
+        // Get / Set User Information from previous Activity
         userXpBefore = bundle.getInt("userXpBefore");
         userLifepointsBefore = bundle.getInt("userLifepointsBefore");
         userXpAfter = bundle.getInt("userXpAfter");
         userLifepointsAfter = bundle.getInt("userLifepointsAfter");
         userDied = bundle.getString("userDied");
 
-        userXp = userXpAfter - userXpBefore;
-        userLifepoints = userLifepointsAfter - userLifepointsBefore;
-
-        // MonsterCandy Information
+        // Get / Set MonsterCandy Information from previous Activity
         monstercandyType = bundle.getString("monstercandyType");
 
+    }
+
+    public void setResultPopUpInformation() {
+
+        Log.d("ResultPopUp", "Method setResultInformation");
+
+        // Set Result TextView
+        TextView victoryResultTextView = findViewById(R.id.victoryResultTextView);
+        TextView defeatResultTextView = findViewById(R.id.defeatResultTextView);
+        TextView eatenResultTextView = findViewById(R.id.eatenResultTextView);
+
+        if (monstercandyType.equals("MO")) {
+            if (userDied.equals("false")) {
+                victoryResultTextView.setVisibility(View.VISIBLE);
+            } else if (userDied.equals("true")) {
+                defeatResultTextView.setVisibility(View.VISIBLE);
+            }
+        } else if (monstercandyType.equals("CA")) {
+            eatenResultTextView.setVisibility(View.VISIBLE);
+        }
+
+        // Set Result User Xp
+        userXp = userXpAfter - userXpBefore;
+
+        // Set Result User LifePoints
+        userLifepoints = userLifepointsAfter - userLifepointsBefore;
+
+        // Set Result User Xp TextView
+        TextView resultXpTextView = findViewById(R.id.resultxpTextView);
+
+        if (userXp >= 0) {
+            resultXpTextView.setText("+" + String.valueOf(userXp));
+        } else if (userXp < 0) {
+            resultXpTextView.setText(String.valueOf(userXp));
+        }
+
+        // Set Result User LifePoints TextView
+        TextView resultLifepointsTextView = findViewById(R.id.resultlifepointsTextView);
+
+        if (userLifepoints >= 0) {
+            resultLifepointsTextView.setText("+" + String.valueOf(userLifepoints));
+        } else if (userLifepoints < 0) {
+            resultLifepointsTextView.setText(String.valueOf(userLifepoints));
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package it.mattiafasoli.mostridatasca;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,11 +15,25 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Register extends AppCompatActivity {
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Register extends AppCompatActivity implements OnMapReadyCallback, Style.OnStyleLoaded {
+
+    // MapBox
+    private MapView mapView;
+    private MapboxMap mapboxMap;
+    private Style style;
 
     // Server Request Queue
     public RequestQueue requestQueue = null;
@@ -30,8 +45,10 @@ public class Register extends AppCompatActivity {
     // Insertion Request Text
     JSONObject jsonBody;
 
-    // Shared Preference Variables
+    // Shared Preference
     public static final String SHARED_PREFERENCES = "sharedPreference";
+
+    // SESSION_ID
     public static final String SESSION_ID = "SESSION_ID";
     public static String session_id;
 
@@ -39,7 +56,16 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Register", "Method onCreate");
+
+        // MapBox Token
+        Mapbox.getInstance(this, "pk.eyJ1IjoiZmFzb3h5IiwiYSI6ImNrMzcyenJoYzA1a3MzZHFsNmdwaWswbTUifQ.NhDg1pENhLDS5KwpexZLhQ");
         setContentView(R.layout.activity_register);
+
+        // MapBox MapView
+        mapView = findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+
 
         // Load SESSION_ID
         loadData();
@@ -59,6 +85,24 @@ public class Register extends AppCompatActivity {
             startActivity(mainActivityIntent);
 
         }
+
+    }
+
+    @Override
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
+        Log.d("Register", "Map ready");
+
+        // MapBox Map
+        this.mapboxMap = mapboxMap;
+        mapboxMap.setStyle(Style.DARK, this);
+    }
+
+    @Override
+    public void onStyleLoaded(@NonNull final Style style) {
+        Log.d("MainActivity", "Style ready");
+
+        // MapBox Style
+        this.style = style;
 
     }
 

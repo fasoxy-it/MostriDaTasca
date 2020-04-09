@@ -20,49 +20,98 @@ import org.json.JSONObject;
 public class Ranking extends AppCompatActivity {
 
     // Server Request Queue
-    public RequestQueue requestQueue = null;
+    private RequestQueue requestQueue;
+
+    // Server Request Insertion Text
+    JSONObject jsonBody = new JSONObject();
 
     // Server Request Constant URL
-    public static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
-    public static final String USERS_RANKING_API = "ranking.php";
+    private static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
+    private static final String USERS_RANKING_API = "ranking.php";
 
-    // Insertion Request Text
-    JSONObject jsonBody;
+    // User Information
+    private static String userId;
 
-    public static String SESSION_ID = null;
-
+    // RecyclerView
+    private RecyclerView recyclerView;
+    private Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Ranking", "Method onCreate");
         setContentView(R.layout.activity_ranking);
 
-        // Create Server Request Queue
-        requestQueue = Volley.newRequestQueue(this);
+        // Set RecyclerView
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Extra Information
+        // Set Adapter
+        adapter = new Adapter(this,this, Model.getInstance().getUsersList());
+        recyclerView.setAdapter(adapter);
+
+        // Get Extra Information from previous Activity
+        getExtraInformation();
+
+        // Get Users Information
+        getUsersInformation();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("Ranking", "Method onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("Ranking", "Method onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("Ranking", "Method onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("Ranking", "Method onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("Ranking", "Method onDestroy");
+    }
+
+    public void getExtraInformation() {
+
+        Log.d("Ranking", "Method getExtraInformation");
+
+        // Get Extra Information from previous Activity
         Bundle bundle = getIntent().getExtras();
 
-        // Get SESSION_ID
-        SESSION_ID = bundle.getString("session_id");
-        Log.d("Ranking", "SESSION_ID: " +  SESSION_ID);
+        // Get / Set User Information from previous Activity
+        userId = bundle.getString("userId");
 
-        getUsersInformation();
     }
 
     public void getUsersInformation() {
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Log.d("Ranking", "Method getUsersInformation");
 
-        final Adapter adapter = new Adapter(this,this, Model.getInstance().getUsersList());
-        recyclerView.setAdapter(adapter);
+        // Create the Request Queue
+        requestQueue = Volley.newRequestQueue(this);
 
-        // Server Request Insertion SESSION_ID
+        // Insertion [session_id] into Request
         try {
-            jsonBody = new JSONObject("{\"session_id\":\"" + SESSION_ID + "\"}");
+            jsonBody.put("session_id", userId);
         } catch (JSONException ex) {
-            Log.d("Ranking", "Insert SESSION_ID failed");
+            Log.d("Ranking", "Insert [session_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -75,7 +124,6 @@ public class Ranking extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Ranking", "Request done");
-                        Log.d("Ranking", response.toString());
 
                         // Depopulate Model
                         Model.getInstance().depopulateUsers();
@@ -85,8 +133,6 @@ public class Ranking extends AppCompatActivity {
 
                         // Update Adapter
                         adapter.notifyDataSetChanged();
-
-                        Log.d("Prova", ""+ Model.getInstance().getUsersList());
 
                     }
                 },
