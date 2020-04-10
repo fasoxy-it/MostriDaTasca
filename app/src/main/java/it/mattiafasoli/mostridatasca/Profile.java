@@ -1,9 +1,5 @@
 package it.mattiafasoli.mostridatasca;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,7 +33,7 @@ import java.io.ByteArrayOutputStream;
 public class Profile extends AppCompatActivity {
 
     // Server Request Queue
-    public RequestQueue requestQueue = null;
+    public RequestQueue requestQueue;
 
     // Server Request Constant URL
     public static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
@@ -42,14 +42,9 @@ public class Profile extends AppCompatActivity {
 
     // Insertion Request Text
     JSONObject jsonBody;
+    public static String SESSION_ID = null;
 
-    // SESSION_ID
-    public static String userId;
-    public static String userNameBefore;
-    public static String userNameAfter;
-    public static String userXp;
-    public static int userLifepoints;
-    public static ImageView userImage;
+    ImageView userImageView;
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
@@ -60,26 +55,84 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Get Extra Information
+        // Extra Information
         Bundle bundle = getIntent().getExtras();
 
-        userId = bundle.getString("session_id");
+        // Get SESSION_ID
+        SESSION_ID = bundle.getString("session_id");
+        Log.d("Profile", "SESSION_ID: " +  SESSION_ID);
+
+        // Modify UserName objectClickListener
+        View modifyUserName = findViewById(R.id.modifyUserNameIcon);
+        modifyUserName.setOnClickListener(objectClickListener);
+
+        // Modify UserImage objectClickListener
+        View modifyUserImage = findViewById(R.id.modifyImageIcon);
+        modifyUserImage.setOnClickListener(objectClickListener);
 
         // Create the Request Queue
         requestQueue = Volley.newRequestQueue(this);
 
-        // Get User Information
-        getUserInformation();
+        // Session_id Insertion into Request
+        try {
+            jsonBody = new JSONObject("{\"session_id\":\"" + SESSION_ID + "\"}");
+        } catch (JSONException ex) {
+            Log.d("Profile", "Insert session_id failed");
+            Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
-        // User Image Modify Button
-        View userImageModifyButton = findViewById(R.id.userImageModifyImageView);
-        userImageModifyButton.setOnClickListener(objectClickListener);
+        // Get User Profile Information from Server
+        JsonObjectRequest getUserProfileInformationRequest = new JsonObjectRequest(
+                BASE_URL + USER_PROFILE_INFORMATION_API,
+                jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Profile", "Request get profile done");
+                        Log.d("Profile", response.toString());
 
-        // User Name Modify Button
-        View userNameModifyButton = findViewById(R.id.imageButton);
-        userNameModifyButton.setOnClickListener(objectClickListener);
+                        try {
 
+                            String username = response.getString("username");
+                            TextView usernameTextView = findViewById(R.id.usernameTextView);
+                            usernameTextView.setText(username);
+                            Log.d("Profile", username);
 
+                            String img = response.getString("img");
+                            userImageView = findViewById(R.id.userImageView);
+                            byte[] decodedString = Base64.decode(img, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            userImageView.setImageBitmap(decodedByte);
+                            Log.d("Profile", img);
+
+                            String xp = response.getString("xp");
+                            TextView xpTextView = findViewById(R.id.xpTextView);
+                            xpTextView.setText(xp);
+                            Log.d("Profile", xp);
+
+                            int lp = response.getInt("lp");
+                            ProgressBar lifepointsProgressBar = findViewById(R.id.lifepointsProgressBar);
+                            lifepointsProgressBar.setProgress(lp);
+                            Log.d("Profile", "" + lp);
+
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Profile", "Request failed");
+                        Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+        );
+
+        // Add the Request to the Request Queue
+        requestQueue.add(getUserProfileInformationRequest);
     }
 
     // Object Click Listener
@@ -88,25 +141,23 @@ public class Profile extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
 
-                // onClick userImageModifyButton
-                case R.id.userImageModifyImageView:
+                // onClick User Location
+                case R.id.modifyUserNameIcon:
                     Log.d("Profile", "Method onClick Modify UserName");
 
-                    TextView userNameTextView = findViewById(R.id.userName);
-                    String userNameString = userNameTextView.getText().toString();
+                    TextView userNameTW = findViewById(R.id.usernameTextView);
+                    String userName = userNameTW.getText().toString();
 
-                    Log.d("Profile", "username" + userNameString);
+                    Log.d("Profile", "username" + userName);
 
+                    // Session_id Insertion into Request
                     try {
-                        jsonBody.put("session_id", userId);
-                        jsonBody.put("username", userNameString);
+                        jsonBody = new JSONObject("{\"session_id\":\""+ SESSION_ID +"\",\"username\":\"" +  userName +  "\"}");
                     } catch (JSONException ex) {
-                        ex.printStackTrace();
                         Log.d("Profile", "Insert session_id failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
                         toast.show();
                     }
-
 
                     // Get User Profile Information from Server
                     JsonObjectRequest setUserProfileInformationRequest = new JsonObjectRequest(
@@ -134,7 +185,7 @@ public class Profile extends AppCompatActivity {
                     requestQueue.add(setUserProfileInformationRequest);
 
                     break;
-                case R.id.imageButton:
+                case R.id.modifyImageIcon:
                     Log.d("Profile", "Method onClick Modify UserImage");
 
                     //check runtime permission
@@ -148,12 +199,12 @@ public class Profile extends AppCompatActivity {
                         }
                         else {
                             //permission already granted
-                            getImageFromGallery();
+                            pickImageFromGallery();
                         }
                     }
                     else {
                         //system os is less then marshallow
-                        getImageFromGallery();
+                        pickImageFromGallery();
                     }
 
                     break;
@@ -161,129 +212,69 @@ public class Profile extends AppCompatActivity {
         }
     };
 
-    public void getUserInformation() {
-
-        // Insert [session_id] into Server Request
-        try {
-            jsonBody.put("session_id", userId);
-        } catch (JSONException ex) {
-            ex.printStackTrace();
-            Log.d("Profile", "Insert [session_id] failed");
-            Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-
-        // Get User Profile Information
-        JsonObjectRequest getUserProfileInformationRequest = new JsonObjectRequest(
-                BASE_URL + USER_PROFILE_INFORMATION_API,
-                jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Profile", "Request done");
-
-                        try {
-
-                            // User Information
-
-                            // User Name
-                            userNameBefore = response.getString("username");
-                            TextView userNameTextView = findViewById(R.id.userNameTextView);
-                            userNameTextView.setText(userNameBefore);
-
-                            // User Image
-                            String userImageString = response.getString("img");
-                            ImageView userImageView = findViewById(R.id.userImageView);
-                            byte[] decodedString = Base64.decode(userImageString, Base64.DEFAULT);
-                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            userImageView.setImageBitmap(decodedByte);
-
-                            // User Xp
-                            userXp = response.getString("xp");
-                            TextView userXpTextView = findViewById(R.id.userXpTextView);
-                            userXpTextView.setText(userXp);
-
-                            // User Lifepoints
-                            userLifepoints = response.getInt("lp");
-                            ProgressBar userLifepointsProgressBar = findViewById(R.id.userLifepointsProgressBar);
-                            userLifepointsProgressBar.setProgress(userLifepoints);
-
-                        } catch (JSONException e){
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Profile", "Request failed");
-                        Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-        );
-
-        // Add the Request to the Request Queue
-        requestQueue.add(getUserProfileInformationRequest);
-    }
-
-    private void getImageFromGallery() {
+    private void pickImageFromGallery() {
+        //intent to pick image
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 
+    //handle result of runtime permission
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_CODE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getImageFromGallery();
-                } else {
-                    Toast toast = Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
+        if (grantResults.length > 0 && grantResults[0] ==
+                PackageManager.PERMISSION_GRANTED) {
+            //permission was granted
+            pickImageFromGallery();
+        }
+        else {
+            //permission was denied
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
     }
+
+    //handle result of picked image
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            //set image to image view
+            userImageView.setImageURI(data.getData());
 
-            userImage.setImageURI(data.getData());
-
-            userImage.buildDrawingCache();
-
-            Bitmap bitmap = userImage.getDrawingCache();
+            userImageView.buildDrawingCache();
+            Bitmap bitmap = userImageView.getDrawingCache();
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
             byte[] byteformat = stream.toByteArray();
-
+            //get the base64 string
             String encodedString = Base64.encodeToString(byteformat, Base64.NO_WRAP);
 
+            Log.d("user", "encode: " + encodedString);
+
+
+            // Session_id Insertion into Request
             try {
-                jsonBody.put("session_id", userId);
-                jsonBody.put("img", encodedString);
+                jsonBody = new JSONObject("{\"session_id\":\""+ SESSION_ID +"\",\"img\":\"" +  encodedString +  "\"}");
             } catch (JSONException ex) {
-                ex.printStackTrace();
-                Log.d("Profile", "Insertion failed");
+                Log.d("Profile", "Insert img failed");
                 Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
                 toast.show();
             }
 
-            // Get User Profile Information from Server
+            // Set User Profile Information from Server
             JsonObjectRequest setUserProfileInformationRequest = new JsonObjectRequest(
                     BASE_URL + SET_USER_PROFILE_INFORMATION_API,
                     jsonBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("Profile", "Request done");
+                            Log.d("Profile", "Request set profile done");
+                            Log.d("Profile", response.toString());
 
                         }
                     },

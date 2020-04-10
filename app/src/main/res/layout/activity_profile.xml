@@ -6,95 +6,104 @@
     android:layout_height="match_parent"
     tools:context=".Profile">
 
-    <ImageButton
-        android:id="@+id/imageButton"
+    <ProgressBar
+        android:id="@+id/lifepointsProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="155dp"
+        android:layout_height="5dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="308dp"
+        android:max="100"
+        android:progress="100"
+        android:progressTint="#009900"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/xpTextView" />
+
+    <ImageView
+        android:id="@+id/lifepointsIcon"
+        android:layout_width="18dp"
+        android:layout_height="16.5dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="305dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/xpIcon"
+        app:srcCompat="@drawable/life_points_icon" />
+
+    <ImageView
+        android:id="@+id/xpIcon"
+        android:layout_width="19.5dp"
+        android:layout_height="11.5dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginBottom="361dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
+        app:srcCompat="@drawable/xp_icon" />
+
+    <TextView
+        android:id="@+id/xpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="358dp"
+        android:text="..."
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/modify_icon" />
-
-    <ImageButton
-        android:id="@+id/userNameModifyButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="308dp"
-        android:layout_marginTop="437dp"
-        android:src="@drawable/modify_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
 
     <ImageView
         android:id="@+id/userImageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginStart="46.5dp"
-        android:layout_marginTop="100dp"
+        android:layout_width="187dp"
+        android:layout_height="172dp"
+        android:layout_marginStart="103dp"
+        android:layout_marginTop="109dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintBottom_toTopOf="@+id/usernameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
+    <EditText
+        android:id="@+id/usernameTextView"
+        android:layout_width="166dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="86dp"
+        android:layout_marginBottom="406dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-medium"
+        android:inputType="textPersonName"
+        android:text="UserName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
-        android:id="@+id/userImageModifyImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="308dp"
-        android:layout_marginTop="364dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/modifyUserNameIcon"
+        android:layout_width="33dp"
+        android:layout_height="27dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="414dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/modify_icon" />
 
-    <TextView
-        android:id="@+id/userNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="440dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
-        android:id="@+id/xpIcon"
-        android:layout_width="32dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="506dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/xp_icon" />
-
-    <TextView
-        android:id="@+id/userXpTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
-        android:layout_marginTop="475dp"
-        android:text="TextView"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/lifepointsIcon"
-        android:layout_width="32dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="525dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/life_points_icon" />
-
-    <TextView
-        android:id="@+id/userLifepointsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
-        android:layout_marginTop="525dp"
-        android:text="TextView"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:id="@+id/modifyImageIcon"
+        android:layout_width="33dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="484dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/userImageView"
+        app:srcCompat="@drawable/modify_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
