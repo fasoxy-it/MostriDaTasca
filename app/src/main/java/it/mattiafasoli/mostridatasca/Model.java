@@ -9,9 +9,11 @@ import java.util.ArrayList;
 public class Model {
     private static final Model instance = new Model();
 
-    private ArrayList<User> users = null;
+    // User ArrayList
+    private ArrayList<User> users;
 
-    private ArrayList<MonsterCandy> monsterscandies = null;
+    // MonsterCandy ArrayList
+    private ArrayList<MonsterCandy> monsterscandies;
 
     public static Model getInstance() {
         return instance;
@@ -34,6 +36,10 @@ public class Model {
         return users.get(index);
     }
 
+    public MonsterCandy getMonsterCandyByIndex(int index) {
+        return monsterscandies.get(index);
+    }
+
     public void depopulateUsers() {
         for (int i=users.size()-1; i>=0; i--){
             users.remove(i);
@@ -41,6 +47,7 @@ public class Model {
     }
 
     public void populateUsers(JSONObject response) {
+
         try {
             JSONArray array = response.getJSONArray("ranking");
 
@@ -59,6 +66,7 @@ public class Model {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     public void depopulateMonstersCandies() {
@@ -75,14 +83,14 @@ public class Model {
 
                 JSONObject monstercandy = array.getJSONObject(i);
 
-                String id = monstercandy.getString("id");
-                Double lat = monstercandy.getDouble("lat");
-                Double lon = monstercandy.getDouble("lon");
-                String type = monstercandy.getString("type");
-                String size = monstercandy.getString("size");
-                String name = monstercandy.getString("name");
+                String monstercandyId = monstercandy.getString("id");
+                Double monstercandyLat = monstercandy.getDouble("lat");
+                Double monstercandyLon = monstercandy.getDouble("lon");
+                String monstercandyType = monstercandy.getString("type");
+                String monstercandySize = monstercandy.getString("size");
+                String monstercandyName = monstercandy.getString("name");
 
-                MonsterCandy newMonsterCandy = new MonsterCandy(id, lat, lon, type, size, name);
+                MonsterCandy newMonsterCandy = new MonsterCandy(monstercandyId, monstercandyLat, monstercandyLon, monstercandyType, monstercandySize, monstercandyName);
                 monsterscandies.add(newMonsterCandy);
 
             }
@@ -99,7 +107,5 @@ public class Model {
     public ArrayList<MonsterCandy> getMonstersCandiesList() {
         return monsterscandies;
     }
-
-
 
 }
