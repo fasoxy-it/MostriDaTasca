@@ -139,7 +139,7 @@ public class PopUp extends Activity {
 
                 // onClick Close Button
                 case R.id.closeButton:
-                    Log.d("PopUp", "Method onClick CloseButton");
+                    Log.d("PopUp", "Method onClick Close Button");
                     PopUp.super.onBackPressed();
                     break;
 
