@@ -207,10 +207,6 @@ public class Profile extends AppCompatActivity {
 
     }
 
-    public void setUserImage() {
-
-    }
-
     private void pickImageFromGallery() {
 
         Log.d("Profile", "Method pickImageFromGallery");
