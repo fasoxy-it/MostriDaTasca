@@ -1,8 +1,5 @@
 package it.mattiafasoli.mostridatasca;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,100 +7,58 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.Style;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class Register extends AppCompatActivity implements OnMapReadyCallback, Style.OnStyleLoaded {
-
-    // MapBox
-    private MapView mapView;
-    private MapboxMap mapboxMap;
-    private Style style;
+public class Register extends AppCompatActivity {
 
     // Server Request Queue
-    public RequestQueue requestQueue = null;
+    private RequestQueue requestQueue;
+
+    // Server Request Insertion Text
+    JSONObject jsonBody = new JSONObject();
 
     // Server Request URL
-    public static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
-    public static final String REGISTER_API = "register.php";
-
-    // Insertion Request Text
-    JSONObject jsonBody;
+    private static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
+    private static final String REGISTER_API = "register.php";
 
     // Shared Preference
-    public static final String SHARED_PREFERENCES = "sharedPreference";
+    private static final String SHARED_PREFERENCES = "sharedPreference";
+    private static final String SESSION_ID = "SESSION_ID";
 
-    // SESSION_ID
-    public static final String SESSION_ID = "SESSION_ID";
-    public static String session_id;
+    // User Information
+    private static String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Register", "Method onCreate");
-
-        // MapBox Token
-        Mapbox.getInstance(this, "pk.eyJ1IjoiZmFzb3h5IiwiYSI6ImNrMzcyenJoYzA1a3MzZHFsNmdwaWswbTUifQ.NhDg1pENhLDS5KwpexZLhQ");
         setContentView(R.layout.activity_register);
 
-        // MapBox MapView
-        mapView = findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
-
-
-        // Load SESSION_ID
+        // Get [session_id] from Shared Preference
         loadData();
 
-        if (session_id.equals("")) {
+        if (userId == "") {
 
-            // Register Button
+            // Set Register Button
             View registerButton = findViewById(R.id.registerButton);
             registerButton.setOnClickListener(objectClickListener);
 
         } else {
 
-            Log.d("Register", "SESSION_ID: " + session_id);
-
-            Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-            mainActivityIntent.putExtra("session_id", session_id);
-            startActivity(mainActivityIntent);
+            Intent loginIntent = new Intent(getApplicationContext(), MainActivity.class);
+            loginIntent.putExtra("session_id", userId);
+            startActivity(loginIntent);
 
         }
-
-    }
-
-    @Override
-    public void onMapReady(@NonNull MapboxMap mapboxMap) {
-        Log.d("Register", "Map ready");
-
-        // MapBox Map
-        this.mapboxMap = mapboxMap;
-        mapboxMap.setStyle(Style.DARK, this);
-    }
-
-    @Override
-    public void onStyleLoaded(@NonNull final Style style) {
-        Log.d("MainActivity", "Style ready");
-
-        // MapBox Style
-        this.style = style;
-
     }
 
     @Override
@@ -131,21 +86,9 @@ public class Register extends AppCompatActivity implements OnMapReadyCallback, S
     }
 
     @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        Log.d("Register", "Method onLowMemory");
-    }
-
-    @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         Log.d("Register", "Method onDestroy");
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d("Register", "Method onSavedInstanceState");
     }
 
     // Object Click Listener
@@ -156,20 +99,41 @@ public class Register extends AppCompatActivity implements OnMapReadyCallback, S
 
                 // onClick Register Button
                 case R.id.registerButton:
-                    Log.d("Register", "Method onClick RegisterButton");
+                    Log.d("Register", "Method onClick registerButton");
+
                     register();
+
                     break;
             }
         }
     };
 
+    public void loadData() {
+        Log.d("Register", "Method loadData");
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        userId = sharedPreferences.getString(SESSION_ID, "");
+    }
+
+    public void saveData(){
+        Log.d("Register", "Method saveData");
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(SESSION_ID, userId);
+        editor.apply();
+    }
+
     public void register() {
+
+        Log.d("Register", "Method Register");
 
         // Create the Request Queue
         requestQueue = Volley.newRequestQueue(this);
 
-        // Set Register to Server
-        JsonObjectRequest register = new JsonObjectRequest(
+        // Get [session_id] from Server
+        JsonObjectRequest getRegisterRequest = new JsonObjectRequest(
                 BASE_URL + REGISTER_API,
                 jsonBody,
                 new Response.Listener<JSONObject>() {
@@ -179,21 +143,22 @@ public class Register extends AppCompatActivity implements OnMapReadyCallback, S
                         Log.d("Register", "Request done");
 
                         try {
-                            session_id = response.getString("session_id");
 
-                            // Save SESSION_ID
+                            // Set [session_id]
+                            userId = response.getString("session_id");
+
+                            // Save [session_id] into SharedPreferences
                             saveData();
 
-                            // Load SESSION_ID
+                            // Load [session_id] from SharedPreferences
                             loadData();
 
-                            // Put Extra Information to the MainActivity
-                            Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                            mainActivityIntent.putExtra("session_id", session_id);
-                            startActivity(mainActivityIntent);
+                            Intent registerIntent = new Intent(getApplicationContext(), Login.class);
+                            registerIntent.putExtra("session_id", userId);
+                            startActivity(registerIntent);
 
-                        } catch (JSONException e){
-                            e.printStackTrace();
+                        } catch (JSONException ex){
+                            ex.printStackTrace();
                         }
 
                     }
@@ -209,19 +174,7 @@ public class Register extends AppCompatActivity implements OnMapReadyCallback, S
         );
 
         // Add the Request to the Request Queue
-        requestQueue.add(register);
-    }
+        requestQueue.add(getRegisterRequest);
 
-    public void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-        session_id = sharedPreferences.getString(SESSION_ID, "");
-    }
-
-    public void saveData(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString(SESSION_ID, session_id);
-        editor.apply();
     }
 }

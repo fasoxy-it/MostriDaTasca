@@ -1,23 +1,21 @@
 package it.mattiafasoli.mostridatasca;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,7 +28,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
-public class Profile extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
     // Server Request Queue
     private RequestQueue requestQueue;
@@ -44,13 +42,8 @@ public class Profile extends AppCompatActivity {
 
     // User Information
     private static String userId;
-    private static Bitmap userImage;
-    private static String userName;
-    private static int userXp;
-    private static int userLifepoints;
 
     ImageView userImageImageView;
-    TextView userNameTextView;
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
@@ -58,21 +51,22 @@ public class Profile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        Log.d("Login", "Method onCreate");
+        setContentView(R.layout.activity_login);
 
         // Get Extra Information from previous Activity
         getExtraInformation();
 
-        // Set User Information
-        setUserInformation();
+        // Set User Image Button
+        View userImageButton = findViewById(R.id.userImageImageView);
+        userImageButton.setOnClickListener(objectClickListener);
 
-        // Set User Name Modify Button
-        View userNameModifyButton = findViewById(R.id.userNameModifyButton);
-        userNameModifyButton.setOnClickListener(objectClickListener);
+        // Set Login Button
+        View loginButton = findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(objectClickListener);
 
-        // Set User Image Modify Button
-        View userImageModifyButton = findViewById(R.id.userImageModifyButton);
-        userImageModifyButton.setOnClickListener(objectClickListener);
+        // Set userImage ImageView
+        userImageImageView = findViewById(R.id.userImageImageView);
 
     }
 
@@ -82,17 +76,9 @@ public class Profile extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
 
-                // onClick Modify User Name Button
-                case R.id.userNameModifyButton:
-                    Log.d("MainActivity", "Method onClick userNameModifyButton");
-
-                    setUserName();
-
-                    break;
-
-                // onClick Modify User Image Button
-                case R.id.userImageModifyButton:
-                    Log.d("MainActivity", "Method onClick userImageModifyButton");
+                // onClick Set User Image ImageView
+                case R.id.userImageImageView:
+                    Log.d("Login", "Method onClick setUserImageImageView");
 
                     //check runtime permission
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -115,106 +101,19 @@ public class Profile extends AppCompatActivity {
 
                     break;
 
+                // onClick Register Button
+                case R.id.loginButton:
+                    Log.d("Login", "Method onClick Login Button");
+
+                    // Set User Name
+                    setUserName();
+
+                    break;
             }
         }
-
-
     };
 
-    public void getExtraInformation() {
-
-        Log.d("Profile", "Method getExtraInformation");
-
-        // Get Extra Information from previous Activity
-        Bundle bundle = getIntent().getExtras();
-
-        // Get / Set User Information from previous Activity
-        userId = bundle.getString("userId");
-        userImage = getIntent().getParcelableExtra("userImage");
-        userName = bundle.getString("userName");
-        userXp = bundle.getInt("userXp");
-        userLifepoints = bundle.getInt("userLifepoints");
-
-    }
-
-    public void setUserInformation() {
-
-        Log.d("Profile", "Method setUserInformation");
-
-        // Set User Image ImageView
-        userImageImageView = findViewById(R.id.userImageImageView);
-        userImageImageView.setImageBitmap(userImage);
-
-        // Set User Name TextView
-        userNameTextView = findViewById(R.id.userNameTextView);
-        userNameTextView.setText(userName);
-
-        // Set User Xp TextView
-        TextView userXpTextView = findViewById(R.id.userXpTextView);
-        userXpTextView.setText(String.valueOf(userXp));
-
-        // Set User Lifepoints ProgressBar
-        ProgressBar userLifepointsProgressBar = findViewById(R.id.userLifepointsProgressBar);
-        userLifepointsProgressBar.setProgress(userLifepoints);
-
-    }
-
-    public void setUserName() {
-
-        Log.d("Profile", "Method setUserName");
-
-        // Get User Name TextView
-        userNameTextView = findViewById(R.id.userNameTextView);
-        userName = userNameTextView.getText().toString();
-
-        // Create the Request Queue
-        requestQueue = Volley.newRequestQueue(this);
-
-        // Insertion [session_id + username] into Request
-        try {
-            jsonBody.put("session_id", userId);
-            jsonBody.put("username", userName);
-        } catch (JSONException ex) {
-            ex.printStackTrace();
-            Log.d("Profile", "Insert [session_id + username] failed");
-            Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-
-        // Set User Name into Server
-        JsonObjectRequest setUserNameRequest = new JsonObjectRequest(
-                BASE_URL + SET_USER_PROFILE_INFORMATION_API,
-                jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Profile", "Request done");
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Profile", "Request failed");
-                        Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-        );
-
-        // Add the Request to the Request Queue
-        requestQueue.add(setUserNameRequest);
-
-    }
-
-    public void setUserImage() {
-
-    }
-
     private void pickImageFromGallery() {
-
-        Log.d("Profile", "Method pickImageFromGallery");
-
         //intent to pick image
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -266,26 +165,26 @@ public class Profile extends AppCompatActivity {
                 jsonBody.put("session_id", userId);
                 jsonBody.put("img", encodedString);
             } catch (JSONException ex) {
-                Log.d("Profile", "Insert [session_id + img] failed");
+                Log.d("Login", "Insert [session_id + img] failed");
                 Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
                 toast.show();
             }
 
-            // Set User Image from Server
-            JsonObjectRequest setUserImageRequest = new JsonObjectRequest(
+            // Set User Image into Server
+            JsonObjectRequest setUserProfileInformationRequest = new JsonObjectRequest(
                     BASE_URL + SET_USER_PROFILE_INFORMATION_API,
                     jsonBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("Profile", "Request done");
+                            Log.d("Login", "Request done");
 
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("Profile", "Request failed");
+                            Log.d("Login", "Request failed");
                             Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
                             toast.show();
                         }
@@ -293,11 +192,70 @@ public class Profile extends AppCompatActivity {
             );
 
             // Add the Request to the Request Queue
-            requestQueue.add(setUserImageRequest);
+            requestQueue.add(setUserProfileInformationRequest);
         }
     }
 
+    public void getExtraInformation() {
 
+        Log.d("Login", "Method getExtraInformation");
 
+        // Get Extra Information from previous Activity
+        Bundle bundle = getIntent().getExtras();
 
+        // Get / Set [session_id]
+        userId = bundle.getString("session_id");
+
+    }
+
+    public void setUserName() {
+
+        Log.d("Login", "Method setUserName");
+
+        // Get User Name TextView
+        TextView userNameTextView = findViewById(R.id.userNameTextView);
+        String userName = userNameTextView.getText().toString();
+
+        // Create the Request Queue
+        requestQueue = Volley.newRequestQueue(this);
+
+        // Insertion [session_id + username] into Request
+        try {
+            jsonBody.put("session_id", userId);
+            jsonBody.put("username", userName);
+        } catch (JSONException ex) {
+            Log.d("Login", "Insert [session_id + username] failed");
+            Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        // Set User Name into Server
+        JsonObjectRequest setUserNameRequest = new JsonObjectRequest(
+                BASE_URL + SET_USER_PROFILE_INFORMATION_API,
+                jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Login", "Request done");
+
+                        Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        mainActivityIntent.putExtra("session_id", userId);
+                        startActivity(mainActivityIntent);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Login", "Request failed");
+                        Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+        );
+
+        // Add the Request to the Request Queue
+        requestQueue.add(setUserNameRequest);
+
+    }
 }

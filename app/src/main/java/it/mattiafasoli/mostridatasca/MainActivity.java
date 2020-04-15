@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -172,11 +173,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Remove MonsterCandy Information from ArrayList
                 removeMonstersCandiesInformation();
-                Log.d("MainActivity", "Method removeMonstersCandiesInformation");
 
                 // Get MonsterCandy Information into ArrayList
                 getMonstersCandiesInformation();
-                Log.d("MainActivity", "Method getMonstersCandiesInformation");
 
             }
         };
@@ -188,11 +187,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             // Show User Location
             showUserLocation();
-            Log.d("MainActivity", "Method showUserLocation");
 
             // Set Camera Position
             setCameraPosition();
-            Log.d("MainActivity", "Method setCameraPosition");
 
         } else {
 
@@ -218,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Get User Information from Server
         getUserInformation();
-        Log.d("MainActivity", "Method getUserInformation");
 
         mapView.onResume();
 
@@ -241,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             locationEngine.removeLocationUpdates(locationListeningCallback);
         }
 
-        // Remove Monstercandy Information Update
+        // Remove MonsterCandy Information Update
         timer.cancel();
 
         mapView.onStop();
@@ -286,10 +282,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // onClick User Information View
                 case R.id.userInformation:
-                    Log.d("MainActivity", "Method onClick userInformationView");
+                    Log.d("MainActivity", "Method onClick userInformation");
 
                     Intent userInformationIntent = new Intent(getBaseContext(), Profile.class);
-                    userInformationIntent.putExtra("session_id", userId);
+                    userInformationIntent.putExtra("userId", userId);
+                    userInformationIntent.putExtra("userImage", userImage);
+                    userInformationIntent.putExtra("userName", userName);
+                    userInformationIntent.putExtra("userXp", userXp);
+                    userInformationIntent.putExtra("userLifepoints", userLifepoints);
+
                     startActivity(userInformationIntent);
 
                     break;
@@ -321,12 +322,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void removeMonstersCandiesInformation() {
 
+        Log.d("MainActivity", "Method removeMonstersCandiesInformation");
+
         monsterscandies.clear();
-        //Log.d("MainActivity", "ArrayList<MonsterCandy> monsterscandies: " + monsterscandies.size());
 
     }
 
     public void getMonstersCandiesInformation() {
+
+        Log.d("MainActivity", "Method getMonstersCandiesInformation");
 
         // Create the Request Queue
         requestQueue = Volley.newRequestQueue(this);
@@ -335,13 +339,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             jsonBody.put("session_id", userId);
         } catch (JSONException ex) {
+            ex.printStackTrace();
             Log.d("MainActivity", "Insert [session_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
             toast.show();
         }
 
         // Get MonsterCandy Information from Server
-        JsonObjectRequest getMonstersCandiesInformation = new JsonObjectRequest(
+        JsonObjectRequest getMonstersCandiesInformationRequest = new JsonObjectRequest(
                 BASE_URL + MONSTERS_CANDIES_MAP_API,
                 jsonBody,
                 new Response.Listener<JSONObject>() {
@@ -352,29 +358,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         // Depopulate Model with MonsterCandy Information
                         Model.getInstance().depopulateMonstersCandies();
                         Log.d("MainActivity", "Method depopulateMonstersCandies");
-                        //Log.d("MainActivity", "Method depopulateMonsterCandies: " + Model.getInstance().getSize());
 
                         // Populate Model with MonsterCandy Information
                         Model.getInstance().populateMonstersCandies(response);
                         Log.d("MainActivity", "Method populateMonstersCandies");
-                        //Log.d("MainActivity", "Method populateMonsterCandies: " + Model.getInstance().getSize());
 
                         // Get MonsterCandy Information from Model
                         monsterscandies = Model.getInstance().getMonstersCandiesList();
-                        //Log.d("MainActivity", "Monsters / Candies: " + monsterscandies);
 
                         // Delete Monsters Candies Icon from Map
                         deleteMonstersCandiesMap();
-                        Log.d("MainActivity", "Method deleteMonstersCandiesMap");
 
                         // Add Monsters Candies Icon from Map
                         addMonstersCandiesMap();
-                        Log.d("MainActivity", "Method addMonstersCandiesMap");
-
-
-                        //Log.d("MainActivity", "ArrayList<MonsterCandy> monsterscandies: " + monsterscandies.size());
-                        //Log.d("MainActivity", "ArrayList<SymbolManager> monsterscandiesIconMap: " + monsterscandiesIconMap.size());
-
 
                     }
                 },
@@ -383,17 +379,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onErrorResponse(VolleyError error) {
                         Log.d("MainActivity", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
                         toast.show();
                     }
                 }
         );
 
         // Add the Request to the Request Queue
-        requestQueue.add(getMonstersCandiesInformation);
+        requestQueue.add(getMonstersCandiesInformationRequest);
 
     }
 
     public void deleteMonstersCandiesMap() {
+
+        Log.d("MainActivity", "Method deleteMonstersCandiesMap");
 
         for (int i=0; i<monsterscandiesIconMap.size(); i++){
             monsterscandiesIconMap.get(i).deleteAll();
@@ -401,11 +400,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         monsterscandiesIconMap.clear();
 
-        //Log.d("MainActivity", "ArrayList<SymbolManager> monsterscandiesIconMap: " + monsterscandiesIconMap.size());
-
     }
 
     public void addMonstersCandiesMap() {
+
+        Log.d("MainActivity", "Method addMonsterCandiesMap");
         for (int i = 0; i < monsterscandies.size(); i++) {
             final String monstercandyId = monsterscandies.get(i).getMonsterCandyId();
             final Double monstercandyLat = monsterscandies.get(i).getMonsterCandyLat();
@@ -413,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             final String monstercandyType = monsterscandies.get(i).getMonsterCandyType();
             final String monstercandySize = monsterscandies.get(i).getMonsterCandySize();
             final String monstercandyName = monsterscandies.get(i).getMonsterCandyName();
-            //Log.d("MainActivity", "" + monsters.get(i).getMonster());
 
             switch (monstercandyType) {
 
@@ -431,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .withIconImage(SMALL_MONSTER_ICON)
                                     .withIconSize(0.75f));
                             monsterscandiesIconMap.add(symbolManager);
-                            //Log.d("MainActivity", "Small Monster Added")
+
                             break;
 
                         case "M" :
@@ -443,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .withIconImage(MEDIUM_MONSTER_ICON)
                                     .withIconSize(0.75f));
                             monsterscandiesIconMap.add(symbolManager);
-                            //Log.d("MainActivity", "Medium Monster Added");
+
                             break;
 
                         case "L" :
@@ -455,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .withIconImage(LARGE_MONSTER_ICON)
                                     .withIconSize(0.75f));
                             monsterscandiesIconMap.add(symbolManager);
-                            //Log.d("MainActivity", "Large Monster Added");
+
                             break;
 
                     }
@@ -475,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .withIconImage(SMALL_CANDY_ICON)
                                     .withIconSize(0.75f));
                             monsterscandiesIconMap.add(symbolManager);
-                            //Log.d("MainActivity", "Small Candy Added");
+
                             break;
 
                         case "M" :
@@ -487,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .withIconImage(MEDIUM_CANDY_ICON)
                                     .withIconSize(0.75f));
                             monsterscandiesIconMap.add(symbolManager);
-                            //Log.d("MainActivity", "Medium Candy Added");
+
                             break;
 
                         case "L" :
@@ -499,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .withIconImage(LARGE_CANDY_ICON)
                                     .withIconSize(0.75f));
                             monsterscandiesIconMap.add(symbolManager);
-                            //Log.d("MainActivity", "Large Candy Added");
+
                             break;
 
                     }
@@ -550,16 +548,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Showing User Location if the Location Permission is granted
             showUserLocation();
 
+            // Set Camera Position if the Location Permission is granted
+            setCameraPosition();
+
         } else {
 
             Log.d("MainActivity", "Location Permission Not Granted");
 
-            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(getApplicationContext(), "Location permission not granted", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+            toast.show();
 
         }
     }
 
     public void showUserLocation() {
+
+        Log.d("MainActivity", "Mehtod showUserLocation");
         LocationEngineRequest request = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_IN_MILLISECONDS)
                 .setPriority(LocationEngineRequest.PRIORITY_NO_POWER)
                 .setMaxWaitTime(DEFAULT_MAX_WAIT_TIME)
@@ -581,6 +586,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setCameraPosition() {
+
+        Log.d("MainActivity", "Method setCameraPosition");
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(location.getLatitude(), location.getLongitude()))
                 .zoom(10)
@@ -627,13 +634,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             jsonBody.put("session_id", userId);
         } catch (JSONException ex) {
+            ex.printStackTrace();
             Log.d("MainActivity", "Insert [session_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
             toast.show();
         }
 
         // Get User Information from Server
-        JsonObjectRequest getUserProfileInformationRequest = new JsonObjectRequest(
+        JsonObjectRequest getUserInformationRequest = new JsonObjectRequest(
                 BASE_URL + USER_PROFILE_INFORMATION_API,
                 jsonBody,
                 new Response.Listener<JSONObject>() {
@@ -647,7 +655,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             userName = response.getString("username");
 
                             // Set User Name TextView
-                            TextView userNameTextView = findViewById(R.id.userName);
+                            TextView userNameTextView = findViewById(R.id.userNameTextView);
                             userNameTextView.setText(userName);
 
                             // Get / Set User Image
@@ -656,25 +664,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             userImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                             // Set User Image ImageView
-                            ImageView userImageImageView = findViewById(R.id.userImage);
+                            ImageView userImageImageView = findViewById(R.id.userImageImageView);
                             userImageImageView.setImageBitmap(userImage);
 
                             // Get / Set User Xp
                             userXp = response.getInt("xp");
 
                             // Set User Xp TextView
-                            TextView userXpTextView = findViewById(R.id.xp);
+                            TextView userXpTextView = findViewById(R.id.userXpTextView);
                             userXpTextView.setText(String.valueOf(userXp));
 
                             // Get / Set User Lifepoints
                             userLifepoints = response.getInt("lp");
 
                             // Set User Lifepoints ProgressBar
-                            ProgressBar userLifepointsProgressBar = findViewById(R.id.lifepoints);
+                            ProgressBar userLifepointsProgressBar = findViewById(R.id.userLifepointsProgressBar);
                             userLifepointsProgressBar.setProgress(userLifepoints);
 
-                        } catch (JSONException e){
-                            e.printStackTrace();
+                        } catch (JSONException ex){
+                            ex.printStackTrace();
                         }
                     }
                 },
@@ -690,7 +698,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         );
 
         // Add the Request to the Request Queue
-        requestQueue.add(getUserProfileInformationRequest);
+        requestQueue.add(getUserInformationRequest);
     }
 
 }

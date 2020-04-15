@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -111,6 +112,7 @@ public class Ranking extends AppCompatActivity {
         try {
             jsonBody.put("session_id", userId);
         } catch (JSONException ex) {
+            ex.printStackTrace();
             Log.d("Ranking", "Insert [session_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
             toast.show();
@@ -127,9 +129,13 @@ public class Ranking extends AppCompatActivity {
 
                         // Depopulate Model
                         Model.getInstance().depopulateUsers();
+                        Log.d("Ranking", "Method depopulateUsers");
+
 
                         // Populate Model
                         Model.getInstance().populateUsers(response);
+                        Log.d("Ranking", "Method populateUsers");
+
 
                         // Update Adapter
                         adapter.notifyDataSetChanged();

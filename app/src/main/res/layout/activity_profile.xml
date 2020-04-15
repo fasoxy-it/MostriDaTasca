@@ -7,7 +7,7 @@
     tools:context=".Profile">
 
     <ProgressBar
-        android:id="@+id/lifepointsProgressBar"
+        android:id="@+id/userLifepointsProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="155dp"
         android:layout_height="5dp"
@@ -18,8 +18,7 @@
         android:progress="100"
         android:progressTint="#009900"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/xpTextView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/lifepointsIcon"
@@ -46,7 +45,7 @@
         app:srcCompat="@drawable/xp_icon" />
 
     <TextView
-        android:id="@+id/xpTextView"
+        android:id="@+id/userXpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
@@ -58,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
 
     <ImageView
-        android:id="@+id/userImageView"
+        android:id="@+id/userImageImageView"
         android:layout_width="187dp"
         android:layout_height="172dp"
         android:layout_marginStart="103dp"
@@ -72,7 +71,7 @@
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <EditText
-        android:id="@+id/usernameTextView"
+        android:id="@+id/userNameTextView"
         android:layout_width="166dp"
         android:layout_height="43dp"
         android:layout_marginStart="86dp"
@@ -85,7 +84,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/modifyUserNameIcon"
+        android:id="@+id/userNameModifyButton"
         android:layout_width="33dp"
         android:layout_height="27dp"
         android:layout_marginEnd="100dp"
@@ -95,7 +94,7 @@
         app:srcCompat="@drawable/modify_icon" />
 
     <ImageView
-        android:id="@+id/modifyImageIcon"
+        android:id="@+id/userImageModifyButton"
         android:layout_width="33dp"
         android:layout_height="27dp"
         android:layout_marginStart="15dp"
@@ -103,7 +102,6 @@
         android:layout_marginBottom="484dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/userImageView"
         app:srcCompat="@drawable/modify_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

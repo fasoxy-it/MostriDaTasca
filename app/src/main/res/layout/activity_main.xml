@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/userLocatioIcon"
+            android:id="@+id/userLocationIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="7dp"
@@ -52,7 +52,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/userImage"
+            android:id="@+id/userImageImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="15dp"
@@ -61,12 +61,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/userNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="92dp"
             android:layout_marginTop="10dp"
-            android:text="User Name"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -84,12 +83,11 @@
             app:srcCompat="@drawable/xp_icon" />
 
         <TextView
-            android:id="@+id/xp"
+            android:id="@+id/userXpTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="127dp"
             android:layout_marginTop="34dp"
-            android:text="..."
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,7 +102,7 @@
             app:srcCompat="@drawable/life_points_icon" />
 
         <ProgressBar
-            android:id="@+id/lifepoints"
+            android:id="@+id/userLifepointsProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="155dp"
             android:layout_height="5dp"

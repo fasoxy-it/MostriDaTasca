@@ -86,7 +86,7 @@ public class ResultPopUp extends AppCompatActivity {
 
                 // onClick Close Button
                 case R.id.closeButton:
-                    Log.d("ResultPopUp", "Method onClick CloseButton");
+                    Log.d("ResultPopUp", "Method onClick Close Button");
                     ResultPopUp.super.onBackPressed();
                     break;
 
@@ -161,21 +161,21 @@ public class ResultPopUp extends AppCompatActivity {
         userLifepoints = userLifepointsAfter - userLifepointsBefore;
 
         // Set Result User Xp TextView
-        TextView resultXpTextView = findViewById(R.id.resultxpTextView);
+        TextView resultUserXpTextView = findViewById(R.id.resultUserXpTextView);
 
         if (userXp >= 0) {
-            resultXpTextView.setText("+" + String.valueOf(userXp));
+            resultUserXpTextView.setText("+" + String.valueOf(userXp));
         } else if (userXp < 0) {
-            resultXpTextView.setText(String.valueOf(userXp));
+            resultUserXpTextView.setText(String.valueOf(userXp));
         }
 
         // Set Result User LifePoints TextView
-        TextView resultLifepointsTextView = findViewById(R.id.resultlifepointsTextView);
+        TextView resultUserLifepointsTextView = findViewById(R.id.resultUserLifepointsTextView);
 
         if (userLifepoints >= 0) {
-            resultLifepointsTextView.setText("+" + String.valueOf(userLifepoints));
+            resultUserLifepointsTextView.setText("+" + String.valueOf(userLifepoints));
         } else if (userLifepoints < 0) {
-            resultLifepointsTextView.setText(String.valueOf(userLifepoints));
+            resultUserLifepointsTextView.setText(String.valueOf(userLifepoints));
         }
 
     }

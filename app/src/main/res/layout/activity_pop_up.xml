@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/monstercandyImageView"
+        android:id="@+id/monstercandyImageImageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/monstercandynameTextView"
+        android:id="@+id/monstercandyNameTextView"
         android:layout_width="240dp"
         android:layout_height="30dp"
         android:layout_marginTop="150dp"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/monstercandysizeTextView"
+        android:id="@+id/monstercandySizeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="121dp"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/monstercandyrangeTextView"
+        android:id="@+id/monstercandyRangeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="121dp"

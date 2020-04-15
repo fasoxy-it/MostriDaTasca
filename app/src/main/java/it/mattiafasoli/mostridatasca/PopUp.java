@@ -226,7 +226,7 @@ public class PopUp extends Activity {
         monstercandyRange = (int) userLocation.distanceTo(monstercandyLocation);
 
         // Set MonsterCandy Range TextView
-        TextView monstercandyRangeTextView = findViewById(R.id.monstercandyrangeTextView);
+        TextView monstercandyRangeTextView = findViewById(R.id.monstercandyRangeTextView);
         monstercandyRangeTextView.setText(String.valueOf(monstercandyRange));
 
     }
@@ -246,6 +246,7 @@ public class PopUp extends Activity {
             ex.printStackTrace();
             Log.d("PopUp", "Insert [session_id + target_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
             toast.show();
         }
 
@@ -266,11 +267,11 @@ public class PopUp extends Activity {
                             monstercandyImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                             // Set MonsterCandy Image ImageView
-                            ImageView monstercandyImageImageView = findViewById(R.id.monstercandyImageView);
+                            ImageView monstercandyImageImageView = findViewById(R.id.monstercandyImageImageView);
                             monstercandyImageImageView.setImageBitmap(monstercandyImage);
 
-                        } catch (JSONException e){
-                            e.printStackTrace();
+                        } catch (JSONException ex){
+                            ex.printStackTrace();
                         }
                     }
                 },
@@ -279,6 +280,7 @@ public class PopUp extends Activity {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("PopUp", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
                         toast.show();
                     }
                 }
@@ -296,11 +298,11 @@ public class PopUp extends Activity {
         getMonsterCandyImage();
 
         // Set MonsterCandy Name TextView
-        TextView monstercandyNameTextView = findViewById(R.id.monstercandynameTextView);
+        TextView monstercandyNameTextView = findViewById(R.id.monstercandyNameTextView);
         monstercandyNameTextView.setText(monstercandyName);
 
         // Set MonsterCandy Size TextView
-        TextView monstercandySizeTextView = findViewById(R.id.monstercandysizeTextView);
+        TextView monstercandySizeTextView = findViewById(R.id.monstercandySizeTextView);
         monstercandySizeTextView.setText(monstercandySize);
 
         // Set MonsterCandy Range TextView
@@ -320,8 +322,10 @@ public class PopUp extends Activity {
             jsonBody.put("session_id", userId);
             jsonBody.put("target_id", monstercandyId);
         } catch (JSONException ex) {
+            ex.printStackTrace();
             Log.d("PopUp", "Insert [session_id + target_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
             toast.show();
         }
 
@@ -343,7 +347,6 @@ public class PopUp extends Activity {
 
                             Intent fighteatIntent = new Intent(getApplicationContext(), ResultPopUp.class);
 
-                            fighteatIntent.putExtra("userId", userId);
                             fighteatIntent.putExtra("userXpBefore", userXpBefore);
                             fighteatIntent.putExtra("userLifepointsBefore", userLifepointsBefore);
                             fighteatIntent.putExtra("userXpAfter", userXpAfter);
@@ -353,8 +356,8 @@ public class PopUp extends Activity {
 
                             startActivity(fighteatIntent);
 
-                        } catch (JSONException e){
-                            e.printStackTrace();
+                        } catch (JSONException ex){
+                            ex.printStackTrace();
                         }
 
                     }
@@ -364,6 +367,7 @@ public class PopUp extends Activity {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("PopUp", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
                         toast.show();
                     }
                 }

@@ -53,7 +53,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/xpicon"
+        android:id="@+id/xpIcon"
         android:layout_width="18dp"
         android:layout_height="16dp"
         android:layout_marginStart="70dp"
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/resultxpTextView"
+        android:id="@+id/resultUserXpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -82,7 +82,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/resultlifepointsTextView"
+        android:id="@+id/resultUserLifepointsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
