@@ -9,7 +9,6 @@
 
 
     <ImageView
-        
         android:id="@+id/closeButton"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -26,7 +25,8 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/monstercandyNameTextView"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/levelImageView"
+        android:id="@+id/levelIcon"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginStart="90dp"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/rangeImageView"
+        android:id="@+id/rangeIcon"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginStart="90dp"
