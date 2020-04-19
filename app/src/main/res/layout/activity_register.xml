@@ -6,12 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".Register">
 
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="393dp"
+        android:layout_height="738dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.mapbox.mapboxsdk.maps.MapView>
+
     <RelativeLayout
         android:id="@+id/registerButton"
-        android:layout_width="120sp"
-        android:layout_height="80dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="250dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="338dp"
         android:background="@drawable/rounded_angle_background"
         android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +30,13 @@
             android:id="@+id/registerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
             android:text="PLAY NOW"
-            android:textSize="24dp"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
@@ -14,11 +15,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Register extends AppCompatActivity {
+public class Register extends AppCompatActivity implements OnMapReadyCallback, Style.OnStyleLoaded {
+
+    // MapBox
+    private MapView mapView;
+    private MapboxMap mapboxMap;
+    private Style style;
 
     // Server Request Queue
     private RequestQueue requestQueue;
@@ -41,7 +55,36 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Register", "Method onCreate");
+
+        // MapBox Token
+        Mapbox.getInstance(this, "pk.eyJ1IjoiZmFzb3h5IiwiYSI6ImNrMzcyenJoYzA1a3MzZHFsNmdwaWswbTUifQ.NhDg1pENhLDS5KwpexZLhQ");
         setContentView(R.layout.activity_register);
+
+        // MapBox MapView
+        mapView = findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+
+    }
+
+    @Override
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
+        Log.d("MainActivity", "Map ready");
+
+        // MapBox Map
+        this.mapboxMap = mapboxMap;
+        mapboxMap.setStyle(Style.DARK, this);
+    }
+
+    @Override
+    public void onStyleLoaded(@NonNull final Style style) {
+        Log.d("MainActivity", "Style ready");
+
+        // MapBox Style
+        this.style = style;
+
+        // Set Camera Position
+        setCameraPosition();
 
         // Get [session_id] from Shared Preference
         loadData();
@@ -59,7 +102,10 @@ public class Register extends AppCompatActivity {
             startActivity(loginIntent);
 
         }
+
     }
+
+
 
     @Override
     public void onStart() {
@@ -107,6 +153,20 @@ public class Register extends AppCompatActivity {
             }
         }
     };
+
+    public void setCameraPosition() {
+
+        Log.d("Register", "Method setCameraPosition");
+
+        CameraPosition position = new CameraPosition.Builder()
+                .target(new LatLng(45.4773,9.1815 ))
+                .zoom(10)
+                .tilt(20)
+                .bearing(0)
+                .build();
+        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000);
+
+    }
 
     public void loadData() {
         Log.d("Register", "Method loadData");

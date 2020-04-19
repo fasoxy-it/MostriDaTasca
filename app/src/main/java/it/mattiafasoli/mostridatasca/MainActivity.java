@@ -286,10 +286,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     Intent userInformationIntent = new Intent(getBaseContext(), Profile.class);
                     userInformationIntent.putExtra("userId", userId);
-                    userInformationIntent.putExtra("userImage", userImage);
-                    userInformationIntent.putExtra("userName", userName);
-                    userInformationIntent.putExtra("userXp", userXp);
-                    userInformationIntent.putExtra("userLifepoints", userLifepoints);
 
                     startActivity(userInformationIntent);
 
@@ -588,6 +584,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void setCameraPosition() {
 
         Log.d("MainActivity", "Method setCameraPosition");
+
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(location.getLatitude(), location.getLongitude()))
                 .zoom(10)
@@ -595,6 +592,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .bearing(0)
                 .build();
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000);
+
     }
 
     @Override

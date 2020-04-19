@@ -6,102 +6,79 @@
     android:layout_height="match_parent"
     tools:context=".Profile">
 
-    <ProgressBar
-        android:id="@+id/userLifepointsProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="155dp"
-        android:layout_height="5dp"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginBottom="308dp"
-        android:max="100"
-        android:progress="100"
-        android:progressTint="#009900"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <ImageView
+        android:id="@+id/userImageImageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <EditText
+        android:id="@+id/userNameEditText"
+        android:layout_width="262dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="412dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-medium"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/lifepointsIcon"
-        android:layout_width="18dp"
-        android:layout_height="16.5dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginBottom="305dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/userNameModifyButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="314dp"
+        android:layout_marginTop="417dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/xpIcon"
-        app:srcCompat="@drawable/life_points_icon" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/modify_icon" />
 
     <ImageView
         android:id="@+id/xpIcon"
-        android:layout_width="19.5dp"
-        android:layout_height="11.5dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="34dp"
-        android:layout_marginBottom="361dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="32dp"
+        android:layout_height="18.82dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="483dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/xp_icon" />
 
     <TextView
         android:id="@+id/userXpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginBottom="358dp"
-        android:text="..."
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="109dp"
+        android:layout_marginTop="479dp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/userImageImageView"
-        android:layout_width="187dp"
-        android:layout_height="172dp"
-        android:layout_marginStart="103dp"
-        android:layout_marginTop="109dp"
-        android:layout_marginEnd="103dp"
-        android:layout_marginBottom="70dp"
-        app:layout_constraintBottom_toTopOf="@+id/usernameTextView"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/lifepointsIcon"
+        android:layout_width="32dp"
+        android:layout_height="29.63dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="524dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        app:srcCompat="@drawable/life_points_icon" />
 
-    <EditText
-        android:id="@+id/userNameTextView"
-        android:layout_width="166dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="86dp"
-        android:layout_marginBottom="406dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-medium"
-        android:inputType="textPersonName"
-        android:text="UserName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/userNameModifyButton"
-        android:layout_width="33dp"
-        android:layout_height="27dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="414dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/modify_icon" />
-
-    <ImageView
-        android:id="@+id/userImageModifyButton"
-        android:layout_width="33dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="484dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/modify_icon" />
+    <ProgressBar
+        android:id="@+id/userLifepointsProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="236dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="109dp"
+        android:layout_marginTop="537dp"
+        android:max="100"
+        android:progress="100"
+        android:progressTint="#009900"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

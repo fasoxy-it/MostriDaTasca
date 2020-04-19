@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,6 +69,36 @@ public class Login extends AppCompatActivity {
         // Set userImage ImageView
         userImageImageView = findViewById(R.id.userImageImageView);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("Login", "Method onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("Login", "Method onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("Login", "Method onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("Login", "Method onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("Login", "Method onDestroy");
     }
 
     // Object Click Listener
@@ -212,9 +243,9 @@ public class Login extends AppCompatActivity {
 
         Log.d("Login", "Method setUserName");
 
-        // Get User Name TextView
-        TextView userNameTextView = findViewById(R.id.userNameTextView);
-        String userName = userNameTextView.getText().toString();
+        // Get User Name EditText
+        EditText userNameEditText = findViewById(R.id.userNameEditText);
+        String userName = userNameEditText.getText().toString();
 
         // Create the Request Queue
         requestQueue = Volley.newRequestQueue(this);

@@ -173,6 +173,10 @@ public class PopUp extends Activity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
+        Log.d("Smartphone", "" + width );
+        Log.d("Smartphone", "" + height );
+        Log.d("Smartphone", "" + displayMetrics );
+
         getWindow().setLayout((int) (width*0.6106870229), (int) (height*0.406504065));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();

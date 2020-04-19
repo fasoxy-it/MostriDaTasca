@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class Profile extends AppCompatActivity {
 
     // Server Request URL
     private static final String BASE_URL = "https://ewserver.di.unimi.it/mobicomp/mostri/";
+    private static final String GET_USER_PROFILE_INFORMATION_API = "getprofile.php";
     private static final String SET_USER_PROFILE_INFORMATION_API="setprofile.php";
 
     // User Information
@@ -50,7 +52,7 @@ public class Profile extends AppCompatActivity {
     private static int userLifepoints;
 
     ImageView userImageImageView;
-    TextView userNameTextView;
+    EditText userNameEditText;
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
@@ -64,14 +66,14 @@ public class Profile extends AppCompatActivity {
         getExtraInformation();
 
         // Set User Information
-        setUserInformation();
+        getUserInformation();
 
         // Set User Name Modify Button
         View userNameModifyButton = findViewById(R.id.userNameModifyButton);
         userNameModifyButton.setOnClickListener(objectClickListener);
 
         // Set User Image Modify Button
-        View userImageModifyButton = findViewById(R.id.userImageModifyButton);
+        View userImageModifyButton = findViewById(R.id.userImageImageView);
         userImageModifyButton.setOnClickListener(objectClickListener);
 
     }
@@ -91,7 +93,7 @@ public class Profile extends AppCompatActivity {
                     break;
 
                 // onClick Modify User Image Button
-                case R.id.userImageModifyButton:
+                case R.id.userImageImageView:
                     Log.d("MainActivity", "Method onClick userImageModifyButton");
 
                     //check runtime permission
@@ -130,42 +132,94 @@ public class Profile extends AppCompatActivity {
 
         // Get / Set User Information from previous Activity
         userId = bundle.getString("userId");
-        userImage = getIntent().getParcelableExtra("userImage");
-        userName = bundle.getString("userName");
-        userXp = bundle.getInt("userXp");
-        userLifepoints = bundle.getInt("userLifepoints");
 
     }
 
-    public void setUserInformation() {
+    public void getUserInformation() {
 
-        Log.d("Profile", "Method setUserInformation");
+        Log.d("Profile", "Method getUserInformation");
 
-        // Set User Image ImageView
-        userImageImageView = findViewById(R.id.userImageImageView);
-        userImageImageView.setImageBitmap(userImage);
+        // Create the Request Queue
+        requestQueue = Volley.newRequestQueue(this);
 
-        // Set User Name TextView
-        userNameTextView = findViewById(R.id.userNameTextView);
-        userNameTextView.setText(userName);
+        // Insertion [session_id] into Request
+        try {
+            jsonBody.put("session_id", userId);
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            Log.d("Profile", "Insert [session_id] failed");
+            Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
-        // Set User Xp TextView
-        TextView userXpTextView = findViewById(R.id.userXpTextView);
-        userXpTextView.setText(String.valueOf(userXp));
+        // Get User Information from Server
+        JsonObjectRequest getUserInformationRequest = new JsonObjectRequest(
+                BASE_URL + GET_USER_PROFILE_INFORMATION_API,
+                jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Profile", "Request done");
 
-        // Set User Lifepoints ProgressBar
-        ProgressBar userLifepointsProgressBar = findViewById(R.id.userLifepointsProgressBar);
-        userLifepointsProgressBar.setProgress(userLifepoints);
+                        try {
 
+                            // Get / Set User Name
+                            userName = response.getString("username");
+
+                            // Set User Name EditText
+                            userNameEditText = findViewById(R.id.userNameEditText);
+                            userNameEditText.setText(userName);
+
+                            // Get / Set User Image
+                            String userImageString = response.getString("img");
+                            byte[] decodedString = Base64.decode(userImageString, Base64.DEFAULT);
+                            userImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                            // Set User Image ImageView
+                            userImageImageView = findViewById(R.id.userImageImageView);
+                            userImageImageView.setImageBitmap(userImage);
+
+                            // Get / Set User Xp
+                            userXp = response.getInt("xp");
+
+                            // Set User Xp TextView
+                            TextView userXpTextView = findViewById(R.id.userXpTextView);
+                            userXpTextView.setText(String.valueOf(userXp));
+
+                            // Get / Set User Lifepoints
+                            userLifepoints = response.getInt("lp");
+
+                            // Set User Lifepoints ProgressBar
+                            ProgressBar userLifepointsProgressBar = findViewById(R.id.userLifepointsProgressBar);
+                            userLifepointsProgressBar.setProgress(userLifepoints);
+
+                        } catch (JSONException ex){
+                            ex.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("MainActivity", "Request failed");
+                        Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+
+        );
+
+        // Add the Request to the Request Queue
+        requestQueue.add(getUserInformationRequest);
     }
 
     public void setUserName() {
 
         Log.d("Profile", "Method setUserName");
 
-        // Get User Name TextView
-        userNameTextView = findViewById(R.id.userNameTextView);
-        userName = userNameTextView.getText().toString();
+        // Get User Name EditText
+        userNameEditText = findViewById(R.id.userNameEditText);
+        userName = userNameEditText.getText().toString();
 
         // Create the Request Queue
         requestQueue = Volley.newRequestQueue(this);
@@ -189,6 +243,8 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Profile", "Request done");
+                        Toast toast = Toast.makeText(getApplicationContext(), "User Name changed", Toast.LENGTH_SHORT);
+                        toast.show();
 
                     }
                 },
@@ -275,6 +331,8 @@ public class Profile extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d("Profile", "Request done");
+                            Toast toast = Toast.makeText(getApplicationContext(), "User Image changed", Toast.LENGTH_SHORT);
+                            toast.show();
 
                         }
                     },
