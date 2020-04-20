@@ -105,7 +105,11 @@ public class ResultPopUp extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int) (width*0.5089058524), (int) (height*0.2303523035));
+        if (width == 1080 && height == 2028){
+            getWindow().setLayout((int) (width*0.5089058524), (int) (height*0.2303523035));
+        } else {
+            getWindow().setLayout((int) (width*0.1953125), (int) (height*0.2361111111));
+        }
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;

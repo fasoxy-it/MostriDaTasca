@@ -8,20 +8,20 @@
 
     <ImageView
         android:id="@+id/userImageImageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="80dp"
+        android:layout_width="600dp"
+        android:layout_height="600dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="44dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher" />
 
     <EditText
         android:id="@+id/userNameEditText"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="420dp"
+        android:layout_marginStart="712dp"
+        android:layout_marginTop="277dp"
         android:ems="10"
         android:gravity="center"
         android:hint="Username"
@@ -32,8 +32,8 @@
         android:id="@+id/loginButton"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginStart="122dp"
-        android:layout_marginTop="505dp"
+        android:layout_marginStart="762dp"
+        android:layout_marginTop="362dp"
         android:background="@drawable/rounded_angle_background"
         android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"

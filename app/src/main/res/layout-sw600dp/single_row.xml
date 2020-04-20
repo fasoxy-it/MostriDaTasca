@@ -6,13 +6,13 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:clickable="true"
         android:id="@+id/userInformation"
         android:layout_width="373dp"
         android:layout_height="80dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="325.5dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/rounded_angle_background"
+        android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -64,8 +64,8 @@
             android:id="@+id/xpIcon"
             android:layout_width="19.5dp"
             android:layout_height="11.5dp"
-            android:layout_marginStart="165dp"
-            android:layout_marginTop="38dp"
+            android:layout_marginStart="167dp"
+            android:layout_marginTop="37dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/xp_icon" />
@@ -74,8 +74,8 @@
             android:id="@+id/userXpTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="196dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginStart="201dp"
+            android:layout_marginTop="34dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,8 +83,8 @@
             android:id="@+id/lifepointsIcon"
             android:layout_width="18dp"
             android:layout_height="16.5dp"
-            android:layout_marginStart="165dp"
-            android:layout_marginTop="53dp"
+            android:layout_marginStart="167dp"
+            android:layout_marginTop="52dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/life_points_icon" />
@@ -92,9 +92,9 @@
         <ProgressBar
             android:id="@+id/userLifepointsProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="160dp"
+            android:layout_width="155dp"
             android:layout_height="5dp"
-            android:layout_marginStart="196dp"
+            android:layout_marginStart="202dp"
             android:layout_marginTop="59dp"
             android:max="100"
             android:progress="100"
