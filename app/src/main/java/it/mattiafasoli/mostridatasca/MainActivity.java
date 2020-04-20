@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // MonsterCandy Icon Map ArrayList
     public ArrayList<SymbolManager> monsterscandiesIconMap = new ArrayList<SymbolManager>();
 
+    // Timer MonsterCandy Information
     Timer timer = new Timer();
 
     @Override

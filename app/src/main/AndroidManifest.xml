@@ -13,19 +13,20 @@
         android:roundIcon="@mipmap/mostridatasca_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login"></activity>
-        <activity
-            android:name=".ResultPopUp"
-            android:theme="@style/AppTheme.ResultPopUp" />
-        <activity android:name=".Ranking" />
-        <activity android:name=".Profile" />
-        <activity android:name=".Register">
+        <activity android:name=".MostriDaTasca">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Login" />
+        <activity
+            android:name=".ResultPopUp"
+            android:theme="@style/AppTheme.ResultPopUp" />
+        <activity android:name=".Ranking" />
+        <activity android:name=".Profile" />
+        <activity android:name=".Register" />
         <activity
             android:name=".PopUp"
             android:theme="@style/AppTheme.PopUp" />
