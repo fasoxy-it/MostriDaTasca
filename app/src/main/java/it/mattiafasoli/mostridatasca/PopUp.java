@@ -67,6 +67,10 @@ public class PopUp extends Activity {
 
     private static int monstercandyRange;
 
+    // Layout Information
+    private int width;
+    private int height;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,11 +153,20 @@ public class PopUp extends Activity {
 
                     if (monstercandyRange > 50) {
                         Toast toast = Toast.makeText(getApplicationContext(), "Too far from the target", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+                        if (width == 1080 && height == 2028){
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+                        } else {
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+                        }
+
                         toast.show();
+
                     } else {
+
                         fighteat();
                         PopUp.super.onBackPressed();
+
                     }
 
                     break;
@@ -170,8 +183,8 @@ public class PopUp extends Activity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        int width = displayMetrics.widthPixels;
-        int height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+        height = displayMetrics.heightPixels;
 
         if (width == 1080 && height == 2028){
             getWindow().setLayout((int) (width*0.6106870229), (int) (height*0.406504065));
@@ -196,7 +209,7 @@ public class PopUp extends Activity {
         Bundle bundle = getIntent().getExtras();
 
         // Get / Set User Information from previous Activity
-        userId = bundle.getString("userId");
+        userId = bundle.getString("session_id");
         userLat = bundle.getDouble("userLat");
         userLon = bundle.getDouble("userLon");
         userXpBefore = bundle.getInt("userXp");
@@ -250,7 +263,13 @@ public class PopUp extends Activity {
             ex.printStackTrace();
             Log.d("PopUp", "Insert [session_id + target_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+            if (width == 1080 && height == 2028){
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+            } else {
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+            }
+
             toast.show();
         }
 
@@ -284,7 +303,13 @@ public class PopUp extends Activity {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("PopUp", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+                        if (width == 1080 && height == 2028){
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+                        } else {
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+                        }
+
                         toast.show();
                     }
                 }
@@ -329,7 +354,13 @@ public class PopUp extends Activity {
             ex.printStackTrace();
             Log.d("PopUp", "Insert [session_id + target_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+            if (width == 1080 && height == 2028){
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+            } else {
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+            }
+
             toast.show();
         }
 
@@ -371,7 +402,13 @@ public class PopUp extends Activity {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("PopUp", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+                        if (width == 1080 && height == 2028){
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+                        } else {
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+                        }
+
                         toast.show();
                     }
                 }

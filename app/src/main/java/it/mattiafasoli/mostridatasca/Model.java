@@ -63,8 +63,8 @@ public class Model {
                 User newUser = new User(userName, userImage, userXp, userLifepoints);
                 users.add(newUser);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException ex) {
+            ex.printStackTrace();
         }
 
     }
@@ -94,8 +94,8 @@ public class Model {
                 monsterscandies.add(newMonsterCandy);
 
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException ex) {
+            ex.printStackTrace();
         }
 
     }

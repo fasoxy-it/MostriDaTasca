@@ -19,6 +19,7 @@ public class MostriDaTasca extends AppCompatActivity {
         Log.d("MostriDaTasca", "Method onStart");
         setContentView(R.layout.activity_mostri_da_tasca);
 
+        // Timer Delay Next Activity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -60,4 +61,5 @@ public class MostriDaTasca extends AppCompatActivity {
         super.onDestroy();
         Log.d("MostriDaTasca", "Method onDestroy");
     }
+
 }

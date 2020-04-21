@@ -52,8 +52,8 @@ public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClic
     /*
     @Override
     public void onClick(View view) {
-        Intent intentDetail = new Intent(parentActivity, Main3Activity.class);
-        intentDetail.putExtra(Main3Activity.STUDENTID_EXTRA, student);
-        parentActivity.startActivity(intentDetail);
+        Intent userIntent = new Intent(parentActivity, [Activity].class);
+        userIntent.putExtra([Activity].[Variable], user);
+        parentActivity.startActivity(userIntent);
     }*/
 }

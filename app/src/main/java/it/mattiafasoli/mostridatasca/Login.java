@@ -44,7 +44,7 @@ public class Login extends AppCompatActivity {
     // User Information
     private static String userId;
 
-    ImageView userImageImageView;
+    private ImageView userImageImageView;
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
@@ -145,10 +145,12 @@ public class Login extends AppCompatActivity {
     };
 
     private void pickImageFromGallery() {
+
         //intent to pick image
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, IMAGE_PICK_CODE);
+
     }
 
     //handle result of runtime permission
@@ -269,9 +271,9 @@ public class Login extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("Login", "Request done");
 
-                        Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                        mainActivityIntent.putExtra("session_id", userId);
-                        startActivity(mainActivityIntent);
+                        Intent loginIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        loginIntent.putExtra("session_id", userId);
+                        startActivity(loginIntent);
 
                     }
                 },

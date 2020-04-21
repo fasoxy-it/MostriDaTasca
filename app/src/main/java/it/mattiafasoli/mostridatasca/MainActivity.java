@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -110,8 +111,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // MonsterCandy Icon Map ArrayList
     public ArrayList<SymbolManager> monsterscandiesIconMap = new ArrayList<SymbolManager>();
 
-    // Timer MonsterCandy Information
+    // Timer Update MonsterCandy Information
     Timer timer = new Timer();
+
+    // Layout Information
+    private int width;
+    private int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // MapBox Location Update
         locationEngine = LocationEngineProvider.getBestLocationEngine(this);
         locationListeningCallback = new LocationListeningCallback(this);
+
+        // Get MainActivity Layout
+        getMainActivityLayout();
 
         // Get Extra Information from previous Activity
         getExtraInformation();
@@ -286,8 +294,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("MainActivity", "Method onClick userInformation");
 
                     Intent userInformationIntent = new Intent(getBaseContext(), Profile.class);
-                    userInformationIntent.putExtra("userId", userId);
-
+                    userInformationIntent.putExtra("session_id", userId);
                     startActivity(userInformationIntent);
 
                     break;
@@ -297,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d("MainActivity", "Method onClick rankingInformation");
 
                     Intent rankingInformationIntent = new Intent(getBaseContext(), Ranking.class);
-                    rankingInformationIntent.putExtra("userId", userId);
+                    rankingInformationIntent.putExtra("session_id", userId);
                     startActivity(rankingInformationIntent);
 
                     break;
@@ -339,7 +346,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             ex.printStackTrace();
             Log.d("MainActivity", "Insert [session_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+            if (width == 1080 && height == 2028){
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+            } else {
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+            }
+
             toast.show();
         }
 
@@ -376,7 +389,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onErrorResponse(VolleyError error) {
                         Log.d("MainActivity", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+                        if (width == 1080 && height == 2028){
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+                        } else {
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+                        }
+
                         toast.show();
                     }
                 }
@@ -402,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void addMonstersCandiesMap() {
 
         Log.d("MainActivity", "Method addMonsterCandiesMap");
+
         for (int i = 0; i < monsterscandies.size(); i++) {
             final String monstercandyId = monsterscandies.get(i).getMonsterCandyId();
             final Double monstercandyLat = monsterscandies.get(i).getMonsterCandyLat();
@@ -508,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     Intent fighteatIntent = new Intent(getApplicationContext(), PopUp.class);
 
-                    fighteatIntent.putExtra("userId", userId);
+                    fighteatIntent.putExtra("session_id", userId);
                     fighteatIntent.putExtra("userXp", userXp);
                     fighteatIntent.putExtra("userLifepoints", userLifepoints);
                     fighteatIntent.putExtra("userLat", location.getLatitude());
@@ -553,7 +573,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.d("MainActivity", "Location Permission Not Granted");
 
             Toast toast = Toast.makeText(getApplicationContext(), "Location permission not granted", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+
+            if (width == 1080 && height == 2028){
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+            } else {
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+            }
+
             toast.show();
 
         }
@@ -562,6 +588,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void showUserLocation() {
 
         Log.d("MainActivity", "Mehtod showUserLocation");
+
         LocationEngineRequest request = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_IN_MILLISECONDS)
                 .setPriority(LocationEngineRequest.PRIORITY_NO_POWER)
                 .setMaxWaitTime(DEFAULT_MAX_WAIT_TIME)
@@ -597,9 +624,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onExplanationNeeded(List<String> permissionsToExplain) {
-
-    }
+    public void onExplanationNeeded(List<String> permissionsToExplain) {}
 
     private static class LocationListeningCallback implements LocationEngineCallback<LocationEngineResult> {
 
@@ -636,6 +661,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             ex.printStackTrace();
             Log.d("MainActivity", "Insert [session_id] failed");
             Toast toast = Toast.makeText(getApplicationContext(), "Insertion failed", Toast.LENGTH_SHORT);
+
+            if (width == 1080 && height == 2028){
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+            } else {
+                toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+            }
+
             toast.show();
         }
 
@@ -696,6 +728,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onErrorResponse(VolleyError error) {
                         Log.d("MainActivity", "Request failed");
                         Toast toast = Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT);
+
+                        if (width == 1080 && height == 2028){
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 500);
+                        } else {
+                            toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 300);
+                        }
+
                         toast.show();
                     }
                 }
@@ -706,4 +745,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         requestQueue.add(getUserInformationRequest);
     }
 
+    public void getMainActivityLayout() {
+
+        Log.d("MainActivity", "Method getMainActivityLayout");
+
+        // Get PopUp Layout
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        width = displayMetrics.widthPixels;
+        height = displayMetrics.heightPixels;
+
+    }
 }

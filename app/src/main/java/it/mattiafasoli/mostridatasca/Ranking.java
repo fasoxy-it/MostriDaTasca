@@ -97,7 +97,7 @@ public class Ranking extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         // Get / Set User Information from previous Activity
-        userId = bundle.getString("userId");
+        userId = bundle.getString("session_id");
 
     }
 
@@ -135,7 +135,6 @@ public class Ranking extends AppCompatActivity {
                         // Populate Model
                         Model.getInstance().populateUsers(response);
                         Log.d("Ranking", "Method populateUsers");
-
 
                         // Update Adapter
                         adapter.notifyDataSetChanged();

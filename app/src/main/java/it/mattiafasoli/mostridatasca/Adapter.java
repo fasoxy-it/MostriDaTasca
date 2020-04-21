@@ -37,6 +37,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         // Set User Information
         User user = Model.getInstance().getUserByIndex(position);
         holder.setUser(user);
+
     }
 
     @Override

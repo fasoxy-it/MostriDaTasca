@@ -51,8 +51,8 @@ public class Profile extends AppCompatActivity {
     private static int userXp;
     private static int userLifepoints;
 
-    ImageView userImageImageView;
-    EditText userNameEditText;
+    private ImageView userImageImageView;
+    private EditText userNameEditText;
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
@@ -68,13 +68,13 @@ public class Profile extends AppCompatActivity {
         // Set User Information
         getUserInformation();
 
-        // Set User Name Modify Button
-        View userNameModifyButton = findViewById(R.id.userNameModifyButton);
-        userNameModifyButton.setOnClickListener(objectClickListener);
-
         // Set User Image Modify Button
         View userImageModifyButton = findViewById(R.id.userImageImageView);
         userImageModifyButton.setOnClickListener(objectClickListener);
+
+        // Set User Name Modify Button
+        View userNameModifyButton = findViewById(R.id.userNameModifyButton);
+        userNameModifyButton.setOnClickListener(objectClickListener);
 
     }
 
@@ -83,14 +83,6 @@ public class Profile extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-
-                // onClick Modify User Name Button
-                case R.id.userNameModifyButton:
-                    Log.d("MainActivity", "Method onClick userNameModifyButton");
-
-                    setUserName();
-
-                    break;
 
                 // onClick Modify User Image Button
                 case R.id.userImageImageView:
@@ -117,6 +109,14 @@ public class Profile extends AppCompatActivity {
 
                     break;
 
+                // onClick Modify User Name Button
+                case R.id.userNameModifyButton:
+                    Log.d("MainActivity", "Method onClick userNameModifyButton");
+
+                    setUserName();
+
+                    break;
+
             }
         }
 
@@ -131,7 +131,7 @@ public class Profile extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         // Get / Set User Information from previous Activity
-        userId = bundle.getString("userId");
+        userId = bundle.getString("session_id");
 
     }
 
