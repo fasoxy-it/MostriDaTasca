@@ -749,7 +749,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Log.d("MainActivity", "Method getMainActivityLayout");
 
-        // Get PopUp Layout
+        // Get MainActivity Layout
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
